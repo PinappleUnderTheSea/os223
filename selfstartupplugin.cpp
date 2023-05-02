@@ -1,9 +1,9 @@
 #include "selfstartupplugin.h"
 
-SelfStarupPlugin::HomeMonitorPlugin(QObject *parent)
+SelfStarupPlugin::SelfStarupPlugin(QObject *parent)
     : QObject(parent)
 {
-
+    
 }
 
 const QString SelfStarupPlugin::pluginName() const
@@ -13,7 +13,7 @@ const QString SelfStarupPlugin::pluginName() const
 
 const QString SelfStarupPlugin::pluginDisplayName() const
 {
-    return QString("Home Monitor");
+    return QString("Self Startup");
 }
 
 void SelfStarupPlugin::init(PluginProxyInterface *proxyInter)
