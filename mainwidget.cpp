@@ -23,14 +23,20 @@ MainWindow::MainWindow(QWidget *parent) :
     tableView->setModel(tableModel);// recommend to set model before detail settings
 
     //set columns
-    QStringList columnTitles;
-    columnTitles << "Application" << "self-startup" << "no self-startup";
-    tableModel->setHorizontalHeaderLabels(columnTitles);
-    tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents); // column fit the contents
+    tableModel->setColumnCount(3);
+    //name of colums
+    tableModel->setHeaderData(0, Qt::Horizontal, QString::fromLocal8Bit("Application"));
+    tableModel->setHeaderData(1, Qt::Horizontal, QString::fromLocal8Bit("self-startup"));
+    tableModel->setHeaderData(2, Qt::Horizontal, QString::fromLocal8Bit("no self-startup"));
 
+    //colum width
+    //tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    tableView->setColumnWidth(0,700);
+    tableView->setColumnWidth(1,150);
+    tableView->setColumnWidth(2,150);
 
     // set contents
-    for(int i = 0;i < 10/*num_of_apps*/; i++) //to_do
+    for(int i = 0;i < 100/*num_of_apps*/; i++) //to_do
     {
         // add button group
         QButtonGroup * m_pButtonGroup = new QButtonGroup(this);
