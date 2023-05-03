@@ -1,6 +1,4 @@
-# 学习 cmake 时建议直接从命令列表作为入口，遇到不清楚意思的命令都可以在此处查阅：
 # https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html
-# 另外下面时完整的文档入口：
 # https://cmake.org/cmake/help/latest/
 
 # 设置运行被配置所需的 cmake 最低版本
