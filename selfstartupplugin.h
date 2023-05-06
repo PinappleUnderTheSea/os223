@@ -2,13 +2,20 @@
 #define SELFSTARTUPPLUGIN_H
 
 #include <dde-dock/pluginsiteminterface.h>
+#include <pluginsiteminterface.h>
 
 #include <QObject>
+#include <QLabel>
 
 #include "informationwidget.h"
+#include "pluginsettingdialog.h"
+#include "type.h"
 
 class SelfStarupPlugin : public QObject, PluginsItemInterface
 {
+private:
+    Settings settings;
+
 private:
     MainWidget *m_pluginWidget;
 
@@ -40,8 +47,8 @@ public:
     bool pluginIsDisable() override;
     void pluginStateSwitched() override;
 
-    const QString itemContextMenu(const QString &itemKey) override;
-    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
+    const QString itemContextMenu(const QString &itemKey) override; //TODO
+    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;   //TODO
 };
 
 #endif // SELFSTARTUPPLUGIN_H
