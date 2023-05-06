@@ -11,6 +11,17 @@ const QString SelfStarupPlugin::pluginName() const
     return QStringLiteral("self_startup");
 }
 
+//写配置信息
+void SelfStarupPlugin::writeConfig(Settings *settings)
+{
+    QMapIterator<QString,QVariant> i(*settings);
+    while(i.hasNext())
+    {
+        i.next();
+        m_proxyInter->saveValue(this,i.key(),i.value());
+    }
+}
+
 const QString SelfStarupPlugin::pluginDisplayName() const
 {
     return QString("Self Startup");
@@ -81,5 +92,44 @@ void SelfStarupPlugin::pluginStateSwitched()
         m_proxyInter->itemRemoved(this, pluginName());
     } else {
         m_proxyInter->itemAdded(this, pluginName());
+    }
+}
+
+const QString SelfStarupPlugin::itemContextMenu(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    QList<QVariant> items;
+    items.reserve(2);
+
+    QMap<QString, QVariant> setting;
+    setting["itemId"] = "setting";
+    setting["itemText"] = "设置";
+    setting["isActive"] = true;
+    items.push_back(setting);
+
+    QMap<QString, QVariant> menu;
+    menu["items"] = items;
+    menu["checkableMenu"] = false;
+    menu["singleCheck"] = false;
+
+    // 返回 JSON 格式的菜单数据
+    return QJsonDocument::fromVariant(menu).toJson();
+}
+
+void SelfStarupPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
+{
+    Q_UNUSED(itemKey);
+    Q_UNUSED(checked)
+
+    // 根据上面接口设置的 id 执行不同的操作
+    if(menuId == "setting")
+    {
+        pluginSettingDialog setting(&settings);
+        if(setting.exec()==QDialog::Accepted)
+        {
+            setting.getDisplayContentSetting(&settings);
+            writeConfig(&settings);
+        }
     }
 }
