@@ -39,6 +39,9 @@ public:
     bool pluginIsAllowDisable() override;
     bool pluginIsDisable() override;
     void pluginStateSwitched() override;
+
+    const QString itemContextMenu(const QString &itemKey) override;
+    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
 };
 
 #endif // SELFSTARTUPPLUGIN_H
