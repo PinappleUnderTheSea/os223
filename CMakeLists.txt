@@ -34,6 +34,7 @@ file(GLOB_RECURSE SRCS "*.h" "*.cpp")
 find_package(Qt5Widgets REQUIRED)
 find_package(DtkWidget REQUIRED)
 
+
 # find_package 命令还可以用来加载 cmake 的功能模块
 # 并不是所有的库都直接支持 cmake 查找的，但大部分都支持了 pkg-config 这个标准，
 # 因此 cmake 提供了间接加载库的模块：FindPkgConfig， 下面这行命令表示加载 FindPkgConfig 模块，

@@ -17,7 +17,7 @@ private:
     Settings settings;
 
 private:
-    MainWidget *m_pluginWidget;
+    InformationWidget *m_pluginWidget;
     MainWidget *m_appletWidget; 
 
     Q_OBJECT
