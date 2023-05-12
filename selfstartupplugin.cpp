@@ -1,6 +1,8 @@
 #include "selfstartupplugin.h"
-
-SelfStarupPlugin::HomeMonitorPlugin(QObject *parent)
+#include <cstdlib>
+#include <dirent.h>
+#inlucde <fstream>
+SelfStarupPlugin::SelfStarupPlugin(QObject *parent)
     : QObject(parent)
 {
 
@@ -13,13 +15,13 @@ const QString SelfStarupPlugin::pluginName() const
 
 const QString SelfStarupPlugin::pluginDisplayName() const
 {
-    return QString("Home Monitor");
+    return QString("Self Startup");
 }
 
 void SelfStarupPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
-    m_pluginWidget = new InformationWidget;
+    m_pluginWidget = new MainWidget;
 
     if (!pluginIsDisable()) {
         m_proxyInter->itemAdded(this, pluginName());
@@ -49,10 +51,10 @@ PluginFlags SelfStarupPlugin::flags() const
     // 返回的插件为Type_Common-快捷区域插件， Quick_Multi快捷插件显示两列的那种，例如网络和蓝牙
     // Attribute_CanDrag该插件在任务栏上支持拖动，Attribute_CanInsert该插件支持在其前面插入其他的图标
     // Attribute_CanSetting该插件支持在控制中心设置显示或隐藏
-    return PluginFlags::Type_Common
-        | PluginFlags::Quick_Multi
-        | PluginFlags::Attribute_CanDrag
-        | PluginFlags::Attribute_CanInsert
+    return PluginFlags::Type_Common // to_do
+        | PluginFlags::Quick_Single
+        //| PluginFlags::Attribute_CanDrag
+        //| PluginFlags::Attribute_CanInsert
         | PluginFlags::Attribute_CanSetting;
 }
 
@@ -82,4 +84,45 @@ void SelfStarupPlugin::pluginStateSwitched()
     } else {
         m_proxyInter->itemAdded(this, pluginName());
     }
+}
+
+vector<string> SelfStarupPlugin::searchAll() {
+    vector<string> ret;
+    for(auto i = selfSetUp.begin(); i!=selfSetUp.end();i++){
+        if(!(*i).second){
+            ret.push_back((*i).first);
+        }
+    }
+    return ret;
+}
+
+pair<string, bool> SelfStarupPlugin::readfiles(string filename){
+    ifstream f;
+    string path("/data/home/pundthsea/.config/autostart");
+    f.open(path + filename);
+    string line;
+    pair<string, bool> ret;
+    while(getline(f, line)){
+        if(line.substr(0, 5) == "Name="){
+            ret.first = line.substr(5);
+        }else if(line.substr(0, 7) == "Hidden="){
+            ret.second = (line.substr(7) == "false");
+            break;
+        }
+    }
+    return ret;
+}
+
+void SelfStarupPlugin::update(){
+    DIR *pDir;
+    struct dirent* ptr;
+    if(!(pDir = opendir("/data/home/pundthsea/.config/autostart"))){
+        cout<<"Folder doesn't Exist!"<<endl;
+        return;
+    }
+    while((ptr = readdir(pDir))!=0) {
+        pair<string, bool> ans= readfiles(string(ptr->d_name));
+        selfSetUp[ans.first] = ans.second;
+    }
+    closedir(pDir);
 }

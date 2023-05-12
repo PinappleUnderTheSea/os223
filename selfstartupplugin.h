@@ -2,21 +2,24 @@
 #define SELFSTARTUPPLUGIN_H
 
 #include <dde-dock/pluginsiteminterface.h>
-
+#include <vector>
+#include <unordered_map>
 #include <QObject>
 
 #include "informationwidget.h"
 
+using namespace std;
 class SelfStarupPlugin : public QObject, PluginsItemInterface
 {
 private:
-    InformationWidget *m_pluginWidget;
+    MainWidget *m_pluginWidget;
 
     Q_OBJECT
     // 声明实现了的接口
     Q_INTERFACES(PluginsItemInterface)
     // 插件元数据
     Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "self_startup.json")
+    unordered_map<string, bool> selfSetUp;
 
 public:
     explicit SelfStarupPlugin(QObject *parent = nullptr);
@@ -35,6 +38,10 @@ public:
 
     QIcon icon(const DockPart &dockPart, int themeType) override;
     PluginFlags flags() const override;
+
+    vector<string> searchAll();
+    void update();
+    bool readfiles(string);
 
     bool pluginIsAllowDisable() override;
     bool pluginIsDisable() override;
