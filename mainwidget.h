@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <vector>
+#include <unordered_map>
 #include <QButtonGroup>
 
 class MainWindow : public QMainWindow
@@ -12,10 +13,14 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    vector<string> searchAll();
+    void update();
+    bool readfiles(string);
 
 private:
     std::vector<QButtonGroup*> Btngroups;
     void onButtonClicked(QAbstractButton *button);
+   
 };
 
 #endif // MAINWINDOW_H

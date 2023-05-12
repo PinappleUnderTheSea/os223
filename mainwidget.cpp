@@ -108,3 +108,44 @@ MainWindow::~MainWindow()
 {
 
 }
+
+vector<string> MainWindow::searchAll() {
+    vector<string> ret;
+    for(auto i = selfSetUp.begin(); i!=selfSetUp.end();i++){
+        if(!(*i).second){
+            ret.push_back((*i).first);
+        }
+    }
+    return ret;
+}
+
+pair<string, bool> MainWindow::readfiles(string filename){
+    ifstream f;
+    string path("/data/home/pundthsea/.config/autostart");
+    f.open(path + filename);
+    string line;
+    pair<string, bool> ret;
+    while(getline(f, line)){
+        if(line.substr(0, 5) == "Name="){
+            ret.first = line.substr(5);
+        }else if(line.substr(0, 7) == "Hidden="){
+            ret.second = (line.substr(7) == "false");
+            break;
+        }
+    }
+    return ret;
+}
+
+void MainWindow::update(){
+    DIR *pDir;
+    struct dirent* ptr;
+    if(!(pDir = opendir("/data/home/pundthsea/.config/autostart"))){
+        cout<<"Folder doesn't Exist!"<<endl;
+        return;
+    }
+    while((ptr = readdir(pDir))!=0) {
+        pair<string, bool> ans= readfiles(string(ptr->d_name));
+        selfSetUp[ans.first] = ans.second;
+    }
+    closedir(pDir);
+}

@@ -10,7 +10,7 @@
 class SelfStarupPlugin : public QObject, PluginsItemInterface
 {
 private:
-    MainWidget *m_pluginWidget;
+    InformationWidget *m_pluginWidget;
 
     Q_OBJECT
     // 声明实现了的接口
