@@ -25,9 +25,12 @@ public:
     void showPaths();
 private:
     std::vector<QButtonGroup*> Btngroups;
-    void onButtonClicked(QAbstractButton *button);
     QMap<QString, bool> selfSetUp;
     QMap<QString, QString> name_path;
+    QString username;
+protected slots:
+    void onButtonClicked(QAbstractButton *button);
+
 };
 
 #endif // MAINWINDOW_H
