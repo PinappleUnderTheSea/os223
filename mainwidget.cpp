@@ -62,8 +62,8 @@ MainWidget::MainWidget(QWidget *parent) :
         //set button property
         button0->setProperty("index", 2*i);
         button1->setProperty("index", 2*i + 1);
-        button0->setProperty("APP","app"); //to_do
-        button1->setProperty("APP","app"); //to_do
+        button0->setProperty("APP", it.key()); //to_do
+        button1->setProperty("APP",it.key()); //to_do
 
         //set the init button status
         if(it.value()) //to_do
@@ -91,14 +91,14 @@ void MainWidget::onButtonClicked(QAbstractButton *button)
     qDebug() << button->property("index").toInt() << Qt::endl;
 
     // functions         to_do
-    // if(button->property("index").toInt() % 2 == 0)
-    // {
-    //      add(button->property("APP").toQString());
-    // }
-    // else
-    // {
-    //      delete(button->property("APP").toQString());
-    // }
+     if(button->property("index").toInt() % 2 == 0)
+     {
+//          add(button->property("APP").toQString());
+     }
+     else
+     {
+          disable(button->property("APP").toString());
+     }
 
     // change status
     QList<QAbstractButton*> list = Btngroups[(button->property("index").toInt()) / 2]->buttons();
@@ -114,10 +114,20 @@ MainWidget::~MainWidget()
 
 }
 
+void MainWidget::showApps(){
+    for(int i=0 ; i< name_path.keys().size();i++){
+        qDebug() << name_path.keys()[i];
+    }
+}
 
+void MainWidget::showPaths(){
+    for(int i=0 ; i< name_path.values().size();i++){
+        qDebug() << name_path.values()[i];
+    }
+}
 
 QPair<QString, bool> MainWidget::readfiles(QString filename){
-    qDebug() << filename;
+//    qDebug() << filename;
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         return QPair<QString, bool>("InvalidFile", 0);
@@ -164,6 +174,8 @@ void MainWidget::update(){
             continue;
         }
         selfSetUp[ans.first] = ans.second;
+        name_path[ans.first] = QString("/data/home/pundthsea/.config/autostart/") + QString(ptr->d_name);
+
     }
     closedir(pDir);
     qDebug() << "update end";
@@ -211,5 +223,37 @@ QVector<QString> MainWidget::searchAll() {
     }
     closedir(pDir);
     return apps;
-
 }
+
+QString MainWidget::disable(QString name){
+    qDebug() << "disable go";
+    if(!name_path.contains(name)){
+        qDebug() << QString("Invalid app name");
+        return QString("Invalid app name");
+    }
+//    qDebug() << selfSetUp[name];
+    QString path = name_path[name];
+    QFile file(path);
+    if (!file.open(QIODevice::ReadWrite | QIODevice::Text)){
+        qDebug() << QString("can not change") ;
+        return QString("can not change") ;
+    }
+    QTextStream in(&file);
+    QVector<QString> contents;
+    QString line;
+    while(!in.atEnd()){
+        line = in.readLine();
+        if(line.left(7) == "Hidden="){
+            line = line.left(7) + QString("true");
+        }
+        contents.push_back(line);
+    }
+    for(int i=0; i<contents.size();i++){
+        in << contents[i] << QString("\n");
+    }
+    selfSetUp[name] = false;
+    qDebug() << QString("Success");
+    return QString("Success");
+}
+
+

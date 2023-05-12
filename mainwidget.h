@@ -20,7 +20,9 @@ public:
     QVector<QString> searchAll();
     void update();
     QPair<QString, bool> readfiles(QString);
-
+    QString disable(QString);
+    void showApps();
+    void showPaths();
 private:
     std::vector<QButtonGroup*> Btngroups;
     void onButtonClicked(QAbstractButton *button);
