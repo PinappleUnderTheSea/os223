@@ -6,8 +6,9 @@
 #include <QRadioButton>
 #include <QButtonGroup>
 #include <QDebug>
-#include <vector>
-#include "mainwindow.h"
+#include "mainwidget.h"
+#include <dirent.h>
+#include <fstream>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -87,11 +88,11 @@ void MainWindow::onButtonClicked(QAbstractButton *button)
     // functions         to_do
     /* if(button->property("index").toInt() % 2 == 0)
      * {
-     *      add(button->property("APP").toString());
+     *      add(button->property("APP").toQString());
      * }
      * else
      * {
-     *      delete(button->property("APP").toString());
+     *      delete(button->property("APP").toQString());
      * }
     */
 
@@ -109,27 +110,32 @@ MainWindow::~MainWindow()
 
 }
 
-vector<string> MainWindow::searchAll() {
-    vector<string> ret;
+QVector<QString> MainWindow::searchAll() {
+    QVector<QString> ret;
     for(auto i = selfSetUp.begin(); i!=selfSetUp.end();i++){
-        if(!(*i).second){
-            ret.push_back((*i).first);
+        if(!(i.value())){
+            ret.push_back(i.key());
         }
     }
     return ret;
 }
 
-pair<string, bool> MainWindow::readfiles(string filename){
-    ifstream f;
-    string path("/data/home/pundthsea/.config/autostart");
-    f.open(path + filename);
-    string line;
-    pair<string, bool> ret;
-    while(getline(f, line)){
-        if(line.substr(0, 5) == "Name="){
-            ret.first = line.substr(5);
-        }else if(line.substr(0, 7) == "Hidden="){
-            ret.second = (line.substr(7) == "false");
+QPair<QString, bool> MainWindow::readfiles(QString filename){
+
+    QString path("/data/home/pundthsea/.config/autostart");
+    QFile file(path + filename);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+
+    }
+    QTextStream in(&file);
+    QString line;
+    QPair<QString, bool> ret;
+    while(!in.atEnd()){
+        line = in.readLine();
+        if(line.left(5) == "Name="){
+            ret.first = line.mid(5);
+        }else if(line.left(5) == "Hidden="){
+            ret.second = (line.mid(7) == "false");
             break;
         }
     }
@@ -140,11 +146,11 @@ void MainWindow::update(){
     DIR *pDir;
     struct dirent* ptr;
     if(!(pDir = opendir("/data/home/pundthsea/.config/autostart"))){
-        cout<<"Folder doesn't Exist!"<<endl;
+//        cout<<"Folder doesn't Exist!"<<endl;
         return;
     }
     while((ptr = readdir(pDir))!=0) {
-        pair<string, bool> ans= readfiles(string(ptr->d_name));
+        QPair<QString, bool> ans= readfiles(QString(ptr->d_name));
         selfSetUp[ans.first] = ans.second;
     }
     closedir(pDir);

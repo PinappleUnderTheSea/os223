@@ -1,10 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
+#include <QtGlobal>
 #include <QMainWindow>
 #include <vector>
 #include <unordered_map>
 #include <QButtonGroup>
+#include <QFile>
+#include <QMap>
+
+using namespace std;
 
 class MainWindow : public QMainWindow
 {
@@ -13,14 +17,15 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    vector<string> searchAll();
+    QVector<QString> searchAll();
     void update();
-    bool readfiles(string);
+    QPair<QString, bool> readfiles(QString);
 
 private:
     std::vector<QButtonGroup*> Btngroups;
     void onButtonClicked(QAbstractButton *button);
-   
+    QMap<QString, bool> selfSetUp;
+    
 };
 
 #endif // MAINWINDOW_H
