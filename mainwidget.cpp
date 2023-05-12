@@ -10,11 +10,37 @@
 #include <dirent.h>
 #include <fstream>
 
+
+QString getName(){
+
+    DIR *pDir;
+    struct dirent* ptr;
+    if(!(pDir = opendir("/home"))){
+        qDebug()<<"home doesn't Exist!"<<endl;
+        return "Get user Name err";
+    }
+//    qDebug() << " 111";
+    QString uname;
+    while((ptr = readdir(pDir))!=0) {
+        if(ptr->d_name[0] == '.'){
+            continue;
+        }
+        qDebug() << ptr->d_name <<' ';
+        uname = (ptr->d_name);
+    }
+
+
+    closedir(pDir);
+    return uname;
+}
+
 MainWidget::MainWidget(QWidget *parent) :
     QMainWindow(parent)
 {
     setFixedSize(1000,500);
+    QString uname = getName();
 
+    username = uname;
     // add tableview
     QTableView *tableView = new QTableView(this);
     tableView->setMinimumSize(1000,500);
@@ -96,22 +122,21 @@ void MainWidget::onButtonClicked(QAbstractButton *button)
     qDebug() << button->property("index").toInt() << Qt::endl;
 
     // functions         to_do
-    if(button->property("index").toInt() % 2 == 0)
-    {
-        //add(button->property("APP").toString());
-    }
-    else
-    {
-        delete(button->property("APP").toString());
-    }
-    
+     if(button->property("index").toInt() % 2 == 0)
+     {
+          enable(button->property("APP").toString());
+     }
+     else
+     {
+          disable(button->property("APP").toString());
+     }
 
     // change status
     QList<QAbstractButton*> list = Btngroups[(button->property("index").toInt()) / 2]->buttons();
     foreach (QAbstractButton *pButton, list)
     {
         QString strStatus = pButton->isChecked() ? "Checked" : "Unchecked";
-        qDebug() << QString("Button : %1 is %2").arg(button->property("index").toInt()).arg(strStatus);
+        qDebug() << QString("Button : %1 is %2").arg(pButton->property("index").toInt()).arg(strStatus);
     }
 }
 
@@ -151,7 +176,7 @@ QPair<QString, bool> MainWidget::readfiles(QString filename){
             nm=0;
         }else if(line.left(7) == "Hidden="){
             ret.second = (line.mid(7) == "false");
-            break;
+//            break;
         }
     }
     return ret;
@@ -165,7 +190,7 @@ void MainWidget::update(){
     }
     DIR *pDir;
     struct dirent* ptr;
-    if(!(pDir = opendir("/data/home/pundthsea/.config/autostart"))){
+    if(!(pDir = opendir((QString("/data/home/")+username+QString("/.config/autostart")).toStdString().c_str()))){
         qDebug()<<"Folder doesn't Exist!"<<endl;
         return;
     }
@@ -174,13 +199,13 @@ void MainWidget::update(){
             continue;
         }
 //        qDebug() << ptr->d_name <<' ';
-        QPair<QString, bool> ans= readfiles(QString("/data/home/pundthsea/.config/autostart/") + QString(ptr->d_name));
+        QPair<QString, bool> ans= readfiles(QString("/data/home/")+username+QString("/.config/autostart/") + QString(ptr->d_name));
 //        qDebug() << ans.first;
         if(ans.first == "InvalidFile"){
             continue;
         }
         selfSetUp[ans.first] = ans.second;
-        name_path[ans.first] = QString("/data/home/pundthsea/.config/autostart/") + QString(ptr->d_name);
+        name_path[ans.first] = QString("/data/home/")+username+QString("/.config/autostart/") + QString(ptr->d_name);
 
     }
     closedir(pDir);
@@ -237,9 +262,9 @@ QString MainWidget::disable(QString name){
         qDebug() << QString("Invalid app name");
         return QString("Invalid app name");
     }
-//    qDebug() << selfSetUp[name];
     QString path = name_path[name];
     QFile file(path);
+//    qDebug() << path;
     if (!file.open(QIODevice::ReadWrite | QIODevice::Text)){
         qDebug() << QString("can not change") ;
         return QString("can not change") ;
@@ -250,16 +275,98 @@ QString MainWidget::disable(QString name){
     while(!in.atEnd()){
         line = in.readLine();
         if(line.left(7) == "Hidden="){
+            qDebug() << line;
             line = line.left(7) + QString("true");
+            qDebug() << QString("change");
         }
         contents.push_back(line);
     }
+    QFile outfile(path);
+//    qDebug() << path;
+    if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text)){
+        qDebug() << QString("can not change") ;
+        return QString("can not change") ;
+    }
+    QTextStream out(&outfile);
     for(int i=0; i<contents.size();i++){
-        in << contents[i] << QString("\n");
+        out << contents[i] << QString("\n");
     }
     selfSetUp[name] = false;
     qDebug() << QString("Success");
     return QString("Success");
 }
 
+QString MainWidget::enable(QString name) {
+    if(!name_path.contains(name)){
+        qDebug() << QString("Invalid app name");
+        return QString("Invalid app name");
+    }
+    QString path = name_path[name];
+    if(path.left(5) == "/data"){
+        QFile file(path);
+    //    qDebug() << path;
+        if (!file.open(QIODevice::ReadWrite | QIODevice::Text)){
+            qDebug() << QString("can not change") ;
+            return QString("can not change") ;
+        }
+        QTextStream in(&file);
+        QVector<QString> contents;
+        QString line;
+        while(!in.atEnd()){
+            line = in.readLine();
+            if(line.left(7) == "Hidden="){
+                qDebug() << line;
+                line = line.left(7) + QString("false");
+                qDebug() << QString("change");
+            }
+            contents.push_back(line);
+        }
+        QFile outfile(path);
+    //    qDebug() << path;
+        if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text)){
+            qDebug() << QString("can not change") ;
+            return QString("can not change") ;
+        }
+        QTextStream out(&outfile);
+        for(int i=0; i<contents.size();i++){
+            out << contents[i] << QString("\n");
+        }
+        selfSetUp[name] = false;
+        qDebug() << QString("Success");
+        return QString("Success");
+    }
+
+    QFile infile(path);
+    QFile outfile(QString("/data/home/")+username+QString("/.config/autostart/") + name + QString(".desktop"));
+
+    QTextStream in(&infile);
+    if (!infile.open(QIODevice::ReadOnly | QIODevice::Text)){
+        qDebug() << QString("can not change") ;
+        return QString("can not change") ;
+    }
+    QVector<QString> contents;
+    int count =0;
+    QString line;
+    while(!in.atEnd()){
+        line = in.readLine();
+        if(count == 1){
+            contents.push_back(QString("Hidden=false"));
+        }
+        contents.push_back(line);
+        count ++;
+    }
+
+    if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text)){
+        qDebug() << QString("can not change") ;
+        return QString("can not change") ;
+    }
+    QTextStream out(&outfile);
+    for(int i=0; i<contents.size();i++){
+        out << contents[i] << QString("\n");
+    }
+    selfSetUp[name] = true;
+    qDebug() << QString("Success");
+    return QString("Success");
+
+}
 

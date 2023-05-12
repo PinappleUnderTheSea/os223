@@ -21,14 +21,17 @@ public:
     void update();
     QPair<QString, bool> readfiles(QString);
     QString disable(QString);
+    QString enable(QString);
     void showApps();
     void showPaths();
 
 private:
-    QMap<int,QButtonGroup*> Btngroups;
-    void onButtonClicked(QAbstractButton *button);
+    std::vector<QButtonGroup*> Btngroups;
     QMap<QString, bool> selfSetUp;
     QMap<QString, QString> name_path;
+    QString username;
+protected slots:
+    void onButtonClicked(QAbstractButton *button);
 
 };
 
