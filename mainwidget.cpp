@@ -10,11 +10,37 @@
 #include <dirent.h>
 #include <fstream>
 
+
+QString getName(){
+
+    DIR *pDir;
+    struct dirent* ptr;
+    if(!(pDir = opendir("/home"))){
+        qDebug()<<"home doesn't Exist!"<<endl;
+        return "Get user Name err";
+    }
+//    qDebug() << " 111";
+    QString uname;
+    while((ptr = readdir(pDir))!=0) {
+        if(ptr->d_name[0] == '.'){
+            continue;
+        }
+        qDebug() << ptr->d_name <<' ';
+        uname = (ptr->d_name);
+    }
+
+
+    closedir(pDir);
+    return uname;
+}
+
 MainWidget::MainWidget(QWidget *parent) :
     QMainWindow(parent)
 {
     setFixedSize(1000,500);
+    QString uname = getName();
 
+    username = uname;
     // add tableview
     QTableView *tableView = new QTableView(this);
     tableView->setMinimumSize(1000,500);
@@ -105,7 +131,7 @@ void MainWidget::onButtonClicked(QAbstractButton *button)
     foreach (QAbstractButton *pButton, list)
     {
         QString strStatus = pButton->isChecked() ? "Checked" : "Unchecked";
-        qDebug() << QString("Button : %1 is %2").arg(button->property("index").toInt()).arg(strStatus);
+        qDebug() << QString("Button : %1 is %2").arg(pButton->property("index").toInt()).arg(strStatus);
     }
 }
 
@@ -231,9 +257,9 @@ QString MainWidget::disable(QString name){
         qDebug() << QString("Invalid app name");
         return QString("Invalid app name");
     }
-//    qDebug() << selfSetUp[name];
     QString path = name_path[name];
     QFile file(path);
+//    qDebug() << path;
     if (!file.open(QIODevice::ReadWrite | QIODevice::Text)){
         qDebug() << QString("can not change") ;
         return QString("can not change") ;
@@ -244,16 +270,26 @@ QString MainWidget::disable(QString name){
     while(!in.atEnd()){
         line = in.readLine();
         if(line.left(7) == "Hidden="){
+            qDebug() << line;
             line = line.left(7) + QString("true");
+            qDebug() << QString("change");
         }
         contents.push_back(line);
     }
+    QFile outfile(path);
+//    qDebug() << path;
+    if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text)){
+        qDebug() << QString("can not change") ;
+        return QString("can not change") ;
+    }
+    QTextStream out(&outfile);
     for(int i=0; i<contents.size();i++){
-        in << contents[i] << QString("\n");
+        out << contents[i] << QString("\n");
     }
     selfSetUp[name] = false;
     qDebug() << QString("Success");
     return QString("Success");
 }
+
 
 
