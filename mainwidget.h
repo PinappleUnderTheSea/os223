@@ -5,13 +5,13 @@
 #include <vector>
 #include <QButtonGroup>
 
-class MainWindow : public QMainWindow
+class MainWidget : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit MainWidget(QWidget *parent = nullptr);
+    ~MainWidget();
 
 private:
     std::vector<QButtonGroup*> Btngroups;
