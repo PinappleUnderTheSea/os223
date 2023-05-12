@@ -6,8 +6,9 @@
 #include <QRadioButton>
 #include <QButtonGroup>
 #include <QDebug>
-#include <vector>
-#include "mainwindow.h"
+#include "mainwidget.h"
+#include <dirent.h>
+#include <fstream>
 
 MainWidget::MainWidget(QWidget *parent) :
     QMainWindow(parent)
@@ -35,15 +36,18 @@ MainWidget::MainWidget(QWidget *parent) :
     tableView->setColumnWidth(1,150);
     tableView->setColumnWidth(2,150);
 
+    //update 
+    update();
+
     // set contents
-    for(int i = 0;i < 100/*num_of_apps*/; i++) //to_do
+    for(int i = 0, QMap<QString, bool>::iterator it = selfSetUp.begin();it != SelfStarup.end(); i++) //to_do
     {
         // add button group
         QButtonGroup * m_pButtonGroup = new QButtonGroup(this);
         Btngroups.push_back(m_pButtonGroup);
 
         //set table content
-        tableModel->setItem(i, 0, new QStandardItem(QString("app%1"). arg(i)));// to_do
+        tableModel->setItem(i, 0, new QStandardItem(it.key()));// to_do
         tableModel->setItem(i, 1, new QStandardItem());
         tableModel->setItem(i, 2, new QStandardItem());
 
@@ -61,7 +65,7 @@ MainWidget::MainWidget(QWidget *parent) :
         button1->setProperty("APP","app"); //to_do
 
         //set the init button status
-        if(0/*has_selfstarting[i]*/) //to_do
+        if(it.value()) //to_do
         {
             button0->setChecked(1);
         }
@@ -85,16 +89,15 @@ void MainWidget::onButtonClicked(QAbstractButton *button)
     qDebug() << button->property("index").toInt() << Qt::endl;
 
     // functions         to_do
-    /* if(button->property("index").toInt() % 2 == 0)
-     * {
-     *      add(button->property("APP").toString());
-     * }
-     * else
-     * {
-     *      delete(button->property("APP").toString());
-     * }
-    */
-
+    // if(button->property("index").toInt() % 2 == 0)
+    // {
+    //      add(button->property("APP").toQString());
+    // }
+    // else
+    // {
+    //      delete(button->property("APP").toQString());
+    // }
+    
     // change status
     QList<QAbstractButton*> list = Btngroups[(button->property("index").toInt()) / 2]->buttons();
     foreach (QAbstractButton *pButton, list)
@@ -107,4 +110,50 @@ void MainWidget::onButtonClicked(QAbstractButton *button)
 MainWidget::~MainWidget()
 {
 
+}
+
+QVector<QString> MainWindow::searchAll() {
+    QVector<QString> ret;
+    for(auto i = selfSetUp.begin(); i!=selfSetUp.end();i++){
+        if(!(i.value())){
+            ret.push_back(i.key());
+        }
+    }
+    return ret;
+}
+
+QPair<QString, bool> MainWindow::readfiles(QString filename){
+
+    QString path("/data/home/pundthsea/.config/autostart");
+    QFile file(path + filename);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+
+    }
+    QTextStream in(&file);
+    QString line;
+    QPair<QString, bool> ret;
+    while(!in.atEnd()){
+        line = in.readLine();
+        if(line.left(5) == "Name="){
+            ret.first = line.mid(5);
+        }else if(line.left(5) == "Hidden="){
+            ret.second = (line.mid(7) == "false");
+            break;
+        }
+    }
+    return ret;
+}
+
+void MainWindow::update(){
+    DIR *pDir;
+    struct dirent* ptr;
+    if(!(pDir = opendir("/data/home/pundthsea/.config/autostart"))){
+//        cout<<"Folder doesn't Exist!"<<endl;
+        return;
+    }
+    while((ptr = readdir(pDir))!=0) {
+        QPair<QString, bool> ans= readfiles(QString(ptr->d_name));
+        selfSetUp[ans.first] = ans.second;
+    }
+    closedir(pDir);
 }
