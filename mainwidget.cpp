@@ -9,7 +9,7 @@
 #include <vector>
 #include "mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWidget::MainWidget(QWidget *parent) :
     QMainWindow(parent)
 {
     setFixedSize(1000,500);
@@ -79,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 }
 
-void MainWindow::onButtonClicked(QAbstractButton *button)
+void MainWidget::onButtonClicked(QAbstractButton *button)
 {
     // now button
     qDebug() << button->property("index").toInt() << Qt::endl;
@@ -104,7 +104,7 @@ void MainWindow::onButtonClicked(QAbstractButton *button)
     }
 }
 
-MainWindow::~MainWindow()
+MainWidget::~MainWidget()
 {
 
 }

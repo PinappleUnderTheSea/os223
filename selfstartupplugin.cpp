@@ -31,9 +31,11 @@ void SelfStarupPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
     m_pluginWidget = new MainWidget;
+    m_appletWidget = new MainWidget;
 
-    if (!pluginIsDisable()) {
+    if (!pluginIsDisable() and m_centralWidget->enabled()) {
         m_proxyInter->itemAdded(this, pluginName());
+        m_proxyInter->requestSetAppletVisible(this, "", true);//set applet visible
     }
 }
 
@@ -42,6 +44,13 @@ QWidget *SelfStarupPlugin::itemWidget(const QString &itemKey)
     Q_UNUSED(itemKey);
     
     return m_pluginWidget;
+}
+
+QWidget *SelfStarupPlugin::itemPopupApplet(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    return m_appletWidget;
 }
 
 
@@ -53,6 +62,13 @@ QIcon SelfStarupPlugin::icon(const DockPart &dockPart, int themeType)
     }
 
     return QIcon();
+}
+
+void SelfStarupPlugin::about()
+{
+    QMessageBox aboutMB(QMessageBox::NoIcon, "SelfStarupPlugin 1.0", "[About]\n\nDeepin Linux DDE Dock Self-startup plugin.\n");
+    aboutMB.setIconPixmap(QPixmap(":/icon.png"));
+    aboutMB.exec();
 }
 
 PluginFlags SelfStarupPlugin::flags() const
@@ -77,22 +93,17 @@ bool SelfStarupPlugin::pluginIsDisable()
 {
     // 第二个参数 “disabled” 表示存储这个值的键（所有配置都是以键值对的方式存储的）
     // 第三个参数表示默认值，即默认不禁用
-    return m_proxyInter->getValue(this, "disabled", false).toBool();
+    //return m_proxyInter->getValue(this, "disabled", false).toBool();
+    return !m_centralWidget->enabled();
 }
 
 void SelfStarupPlugin::pluginStateSwitched()
 {
-    // 获取当前禁用状态的反值作为新的状态值
-    const bool disabledNew = !pluginIsDisable();
-    // 存储新的状态值
-    m_proxyInter->saveValue(this, "disabled", disabledNew);
-
-    // 根据新的禁用状态值处理主控件的加载和卸载
-    if (disabledNew) {
-        m_proxyInter->itemRemoved(this, pluginName());
-    } else {
+    m_centralWidget->setEnabled(!m_centralWidget->enabled());
+    if (m_centralWidget->enabled())
         m_proxyInter->itemAdded(this, pluginName());
-    }
+    else
+        m_proxyInter->itemRemoved(this, pluginName());
 }
 
 const QString SelfStarupPlugin::itemContextMenu(const QString &itemKey)

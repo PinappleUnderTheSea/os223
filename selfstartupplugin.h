@@ -18,6 +18,7 @@ private:
 
 private:
     MainWidget *m_pluginWidget;
+    MainWidget *m_appletWidget; 
 
     Q_OBJECT
     // 声明实现了的接口
@@ -39,6 +40,9 @@ public:
     QWidget *itemWidget(const QString &itemKey) override;
     PluginMode status() const override;
     QString description() const override;
+
+    //弹窗
+    QWidget *itemPopupApplet(const QString &itemKey) override;
 
     QIcon icon(const DockPart &dockPart, int themeType) override;
     PluginFlags flags() const override;
