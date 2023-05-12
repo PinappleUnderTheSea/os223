@@ -7,16 +7,16 @@
 #include <QButtonGroup>
 #include <QFile>
 #include <QMap>
-
+#include <QDebug>
 using namespace std;
 
-class MainWindow : public QMainWindow
+class MainWidget : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit MainWidget(QWidget *parent = nullptr);
+    ~MainWidget();
     QVector<QString> searchAll();
     void update();
     QPair<QString, bool> readfiles(QString);
@@ -25,7 +25,7 @@ private:
     std::vector<QButtonGroup*> Btngroups;
     void onButtonClicked(QAbstractButton *button);
     QMap<QString, bool> selfSetUp;
-    
+    QMap<QString, QString> name_path;
 };
 
 #endif // MAINWINDOW_H
