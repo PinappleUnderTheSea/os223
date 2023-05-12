@@ -10,7 +10,7 @@
 #include <dirent.h>
 #include <fstream>
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWidget::MainWidget(QWidget *parent) :
     QMainWindow(parent)
 {
     setFixedSize(1000,500);
@@ -36,15 +36,19 @@ MainWindow::MainWindow(QWidget *parent) :
     tableView->setColumnWidth(1,150);
     tableView->setColumnWidth(2,150);
 
+    //update
+    update();
+
     // set contents
-    for(int i = 0;i < 100/*num_of_apps*/; i++) //to_do
+    int i=0;
+    for(auto it = selfSetUp.begin();it != selfSetUp.end();it++) //to_do
     {
         // add button group
         QButtonGroup * m_pButtonGroup = new QButtonGroup(this);
         Btngroups.push_back(m_pButtonGroup);
 
         //set table content
-        tableModel->setItem(i, 0, new QStandardItem(QString("app%1"). arg(i)));// to_do
+        tableModel->setItem(i, 0, new QStandardItem(it.key()));// to_do
         tableModel->setItem(i, 1, new QStandardItem());
         tableModel->setItem(i, 2, new QStandardItem());
 
@@ -62,7 +66,7 @@ MainWindow::MainWindow(QWidget *parent) :
         button1->setProperty("APP","app"); //to_do
 
         //set the init button status
-        if(0/*has_selfstarting[i]*/) //to_do
+        if(it.value()) //to_do
         {
             button0->setChecked(1);
         }
@@ -77,24 +81,24 @@ MainWindow::MainWindow(QWidget *parent) :
         // insert the buttons
         tableView->setIndexWidget(tableModel->index(tableModel->rowCount()-1,1),button0);
         tableView->setIndexWidget(tableModel->index(tableModel->rowCount()-1,2),button1);
+        i++;
     }
 }
 
-void MainWindow::onButtonClicked(QAbstractButton *button)
+void MainWidget::onButtonClicked(QAbstractButton *button)
 {
     // now button
     qDebug() << button->property("index").toInt() << Qt::endl;
 
     // functions         to_do
-    /* if(button->property("index").toInt() % 2 == 0)
-     * {
-     *      add(button->property("APP").toQString());
-     * }
-     * else
-     * {
-     *      delete(button->property("APP").toQString());
-     * }
-    */
+    // if(button->property("index").toInt() % 2 == 0)
+    // {
+    //      add(button->property("APP").toQString());
+    // }
+    // else
+    // {
+    //      delete(button->property("APP").toQString());
+    // }
 
     // change status
     QList<QAbstractButton*> list = Btngroups[(button->property("index").toInt()) / 2]->buttons();
@@ -105,36 +109,31 @@ void MainWindow::onButtonClicked(QAbstractButton *button)
     }
 }
 
-MainWindow::~MainWindow()
+MainWidget::~MainWidget()
 {
 
 }
 
-QVector<QString> MainWindow::searchAll() {
-    QVector<QString> ret;
-    for(auto i = selfSetUp.begin(); i!=selfSetUp.end();i++){
-        if(!(i.value())){
-            ret.push_back(i.key());
-        }
-    }
-    return ret;
-}
 
-QPair<QString, bool> MainWindow::readfiles(QString filename){
 
-    QString path("/data/home/pundthsea/.config/autostart");
-    QFile file(path + filename);
+QPair<QString, bool> MainWidget::readfiles(QString filename){
+    qDebug() << filename;
+    QFile file(filename);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-
+        return QPair<QString, bool>("InvalidFile", 0);
     }
     QTextStream in(&file);
     QString line;
     QPair<QString, bool> ret;
+//    qDebug() << in.atEnd();
+    int nm=1;
     while(!in.atEnd()){
         line = in.readLine();
-        if(line.left(5) == "Name="){
+
+        if(line.left(5) == "Name=" && nm==1){
             ret.first = line.mid(5);
-        }else if(line.left(5) == "Hidden="){
+            nm=0;
+        }else if(line.left(7) == "Hidden="){
             ret.second = (line.mid(7) == "false");
             break;
         }
@@ -142,16 +141,75 @@ QPair<QString, bool> MainWindow::readfiles(QString filename){
     return ret;
 }
 
-void MainWindow::update(){
+void MainWidget::update(){
+    qDebug()<<"update go";
+    QVector<QString> apps = searchAll();
+    for(int i=0; i<apps.size();i++){
+        selfSetUp[apps[i]] = false;
+    }
     DIR *pDir;
     struct dirent* ptr;
     if(!(pDir = opendir("/data/home/pundthsea/.config/autostart"))){
-//        cout<<"Folder doesn't Exist!"<<endl;
+        qDebug()<<"Folder doesn't Exist!"<<endl;
         return;
     }
     while((ptr = readdir(pDir))!=0) {
-        QPair<QString, bool> ans= readfiles(QString(ptr->d_name));
+        if(ptr->d_name[0] == '.'){
+            continue;
+        }
+//        qDebug() << ptr->d_name <<' ';
+        QPair<QString, bool> ans= readfiles(QString("/data/home/pundthsea/.config/autostart/") + QString(ptr->d_name));
+//        qDebug() << ans.first;
+        if(ans.first == "InvalidFile"){
+            continue;
+        }
         selfSetUp[ans.first] = ans.second;
     }
     closedir(pDir);
+    qDebug() << "update end";
+}
+
+QVector<QString> MainWidget::searchAll() {
+    string path("/opt/apps");
+    DIR *pDir;
+    struct dirent* ptr;
+    if(!(pDir = opendir("/opt/apps"))){
+        qDebug()<<"Folder doesn't Exist!"<<endl;
+        return QVector<QString>(1, "No app");
+    }
+    QVector<QString> apps;
+
+    while((ptr = readdir(pDir))!=0) {
+        if(ptr->d_name[0] == '.'){
+            continue;
+        }
+//        qDebug() << ptr->d_name <<' ';
+
+        string filename;
+        DIR *subDir;
+        struct dirent *subptr;
+        if(!(subDir = opendir((path + '/' + ptr->d_name + "/entries/applications").c_str() ))){
+            qDebug()<<"Folder doesn't Exist!"<<endl;
+            continue;
+        }
+        while((subptr = readdir(subDir))!=0){
+//            qDebug() << subptr->d_name;
+            if(QString(subptr->d_name).right(8) == ".desktop"){
+                filename = string(subptr->d_name);
+                break;
+            }
+        }
+//        qDebug() << QString(filename.c_str()) << QString(ptr->d_name);
+        QPair<QString, bool> ans= readfiles(QString((path + '/' + ptr->d_name + "/entries/applications/" + filename).c_str()));
+//        qDebug() << ans.first;
+        closedir(subDir);
+        if(ans.first == "InvalidFile"){
+            continue;
+        }
+        apps.push_back(ans.first);
+        name_path[ans.first] = QString((path + '/' + ptr->d_name + "/entries/applications/" + filename).c_str());
+    }
+    closedir(pDir);
+    return apps;
+
 }
