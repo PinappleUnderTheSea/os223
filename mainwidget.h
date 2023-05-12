@@ -21,6 +21,7 @@ public:
     void update();
     QPair<QString, bool> readfiles(QString);
     QString disable(QString);
+    QString enable(QString);
     void showApps();
     void showPaths();
 private:
