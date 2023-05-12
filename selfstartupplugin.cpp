@@ -131,7 +131,7 @@ const QString SelfStarupPlugin::itemContextMenu(const QString &itemKey)
 void SelfStarupPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
 {
     Q_UNUSED(itemKey);
-    Q_UNUSED(checked)
+    Q_UNUSED(checked);
 
     // 根据上面接口设置的 id 执行不同的操作
     if(menuId == "setting")
