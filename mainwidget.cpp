@@ -218,7 +218,7 @@ QVector<QString> MainWidget::searchAll() {
     struct dirent* ptr;
     if(!(pDir = opendir("/opt/apps"))){
         qDebug()<<"Folder doesn't Exist!"<<endl;
-        return QVector<QString>(1, "No app");
+        return QVector<QString>(0, "No app");
     }
     QVector<QString> apps;
 
