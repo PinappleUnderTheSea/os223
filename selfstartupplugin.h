@@ -2,7 +2,7 @@
 #define SELFSTARTUPPLUGIN_H
 
 #include <dde-dock/pluginsiteminterface.h>
-#include <pluginsiteminterface.h>
+#include <dde-dock/pluginproxyinterface.h>
 
 #include <QObject>
 #include <QLabel>
@@ -16,6 +16,10 @@
 
 class SelfStartupPlugin : public QObject, PluginsItemInterface
 {
+    Q_OBJECT
+    Q_INTERFACES(PluginsItemInterface)
+    Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "self_startup.json")
+
 private:
     Settings settings;
 
@@ -41,14 +45,14 @@ public:
 
     // 返回插件的 widget
     QWidget *itemWidget(const QString &itemKey) override;
-    PluginMode status() const override;
-    QString description() const override;
+    // PluginMode status() const override;
+    // QString description() const override;
 
     //弹窗
     QWidget *itemPopupApplet(const QString &itemKey) override;
 
     QIcon icon(const DockPart &dockPart, int themeType) override;
-    PluginFlags flags() const override;
+    // PluginFlags flags() const override;
 
     bool pluginIsAllowDisable() override;
     bool pluginIsDisable() override;
