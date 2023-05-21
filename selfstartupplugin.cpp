@@ -41,9 +41,13 @@ void SelfStartupPlugin::init(PluginProxyInterface *proxyInter)
 
 QWidget *SelfStartupPlugin::itemWidget(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
+    // Q_UNUSED(itemKey);
     
-    return m_pluginWidget;
+    // return m_pluginWidget;
+    if (itemKey == QUICK_ITEM_KEY)
+    	return m_pluginWidget;
+    
+    return nullptr;
 }
 
 QWidget *SelfStartupPlugin::itemPopupApplet(const QString &itemKey)
@@ -54,15 +58,15 @@ QWidget *SelfStartupPlugin::itemPopupApplet(const QString &itemKey)
 }
 
 
-QIcon SelfStartupPlugin::icon(const DockPart &dockPart, int themeType)
-{
-    if (dockPart == DockPart::QuickShow) {
-        QIcon icon;
-        return icon;
-    }
+// QIcon SelfStartupPlugin::icon(const DockPart &dockPart, int themeType)
+// {
+//     if (dockPart == DockPart::QuickShow) {
+//         QIcon icon;
+//         return icon;
+//     }
 
-    return QIcon();
-}
+//     return QIcon();
+// }
 
 void SelfStartupPlugin::about()
 {
