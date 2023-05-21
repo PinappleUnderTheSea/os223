@@ -71,17 +71,17 @@ void SelfStartupPlugin::about()
     aboutMB.exec();
 }
 
-PluginFlags SelfStartupPlugin::flags() const
-{
-    // 返回的插件为Type_Common-快捷区域插件， Quick_Multi快捷插件显示两列的那种，例如网络和蓝牙
-    // Attribute_CanDrag该插件在任务栏上支持拖动，Attribute_CanInsert该插件支持在其前面插入其他的图标
-    // Attribute_CanSetting该插件支持在控制中心设置显示或隐藏
-    return PluginFlags::Type_Common // to_do
-        | PluginFlags::Quick_Single
-        //| PluginFlags::Attribute_CanDrag
-        //| PluginFlags::Attribute_CanInsert
-        | PluginFlags::Attribute_CanSetting;
-}
+// PluginFlags SelfStartupPlugin::flags() const
+// {
+//     // 返回的插件为Type_Common-快捷区域插件， Quick_Multi快捷插件显示两列的那种，例如网络和蓝牙
+//     // Attribute_CanDrag该插件在任务栏上支持拖动，Attribute_CanInsert该插件支持在其前面插入其他的图标
+//     // Attribute_CanSetting该插件支持在控制中心设置显示或隐藏
+//     return PluginFlags::Type_Common // to_do
+//         | PluginFlags::Quick_Single
+//         //| PluginFlags::Attribute_CanDrag
+//         //| PluginFlags::Attribute_CanInsert
+//         | PluginFlags::Attribute_CanSetting;
+// }
 
 bool SelfStartupPlugin::pluginIsAllowDisable()
 {
