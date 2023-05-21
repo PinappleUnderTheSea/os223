@@ -16,7 +16,7 @@ QString getName(){
     DIR *pDir;
     struct dirent* ptr;
     if(!(pDir = opendir("/home"))){
-        qDebug()<<"home doesn't Exist!"<<endl;
+        qDebug()<<"home doesn't Exist!"<<Qt::endl;
         return "Get user Name err";
     }
 //    qDebug() << " 111";
@@ -191,7 +191,7 @@ void MainWidget::update(){
     DIR *pDir;
     struct dirent* ptr;
     if(!(pDir = opendir((QString("/data/home/")+username+QString("/.config/autostart")).toStdString().c_str()))){
-        qDebug()<<"Folder doesn't Exist!"<<endl;
+        qDebug()<<"Folder doesn't Exist!"<<Qt::endl;
         return;
     }
     while((ptr = readdir(pDir))!=0) {
@@ -217,7 +217,7 @@ QVector<QString> MainWidget::searchAll() {
     DIR *pDir;
     struct dirent* ptr;
     if(!(pDir = opendir("/opt/apps"))){
-        qDebug()<<"Folder doesn't Exist!"<<endl;
+        qDebug()<<"Folder doesn't Exist!"<<Qt::endl;
         return QVector<QString>(0, "No app");
     }
     QVector<QString> apps;
@@ -232,7 +232,7 @@ QVector<QString> MainWidget::searchAll() {
         DIR *subDir;
         struct dirent *subptr;
         if(!(subDir = opendir((path + '/' + ptr->d_name + "/entries/applications").c_str() ))){
-            qDebug()<<"Folder doesn't Exist!"<<endl;
+            qDebug()<<"Folder doesn't Exist!"<<Qt::endl;
             continue;
         }
         while((subptr = readdir(subDir))!=0){
