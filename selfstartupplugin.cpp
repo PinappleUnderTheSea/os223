@@ -33,7 +33,7 @@ void SelfStartupPlugin::init(PluginProxyInterface *proxyInter)
     m_pluginWidget = new MainWidget;
     m_appletWidget = new MainWidget;
 
-    if (!pluginIsDisable() and m_pluginWidget->enable()) {
+    if (!pluginIsDisable()) {
         m_proxyInter->itemAdded(this, pluginName());
         m_proxyInter->requestSetAppletVisible(this, "", true);//set applet visible
     }
