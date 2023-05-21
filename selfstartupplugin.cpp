@@ -68,12 +68,12 @@ QWidget *SelfStartupPlugin::itemPopupApplet(const QString &itemKey)
 //     return QIcon();
 // }
 
-void SelfStartupPlugin::about()
-{
-    QMessageBox aboutMB(QMessageBox::NoIcon, "SelfStarupPlugin 1.0", "[About]\n\nDeepin Linux DDE Dock Self-startup plugin.\n");
-    aboutMB.setIconPixmap(QPixmap(":/icon.png"));
-    aboutMB.exec();
-}
+// void SelfStartupPlugin::about()
+// {
+//     QMessageBox aboutMB(QMessageBox::NoIcon, "SelfStarupPlugin 1.0", "[About]\n\nDeepin Linux DDE Dock Self-startup plugin.\n");
+//     aboutMB.setIconPixmap(QPixmap(":/icon.png"));
+//     aboutMB.exec();
+// }
 
 // PluginFlags SelfStartupPlugin::flags() const
 // {
