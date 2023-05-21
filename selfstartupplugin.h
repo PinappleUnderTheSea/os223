@@ -38,8 +38,8 @@ public:
 
     // 返回插件的 widget
     QWidget *itemWidget(const QString &itemKey) override;
-    PluginMode status() const override;
-    QString description() const override;
+    // PluginMode status() const override;
+    // QString description() const override;
 
     //弹窗
     QWidget *itemPopupApplet(const QString &itemKey) override;
@@ -50,6 +50,8 @@ public:
     bool pluginIsAllowDisable() override;
     bool pluginIsDisable() override;
     void pluginStateSwitched() override;
+
+    void about();
 
     const QString itemContextMenu(const QString &itemKey) override; //TODO
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;   //TODO
