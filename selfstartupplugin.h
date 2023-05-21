@@ -8,7 +8,7 @@
 #include <QLabel>
 
 #include "informationwidget.h"
-#include "pluginsettingdialog.h"
+#include "aboutDialog.h"
 #include "type.h"
 
 class SelfStarupPlugin : public QObject, PluginsItemInterface
