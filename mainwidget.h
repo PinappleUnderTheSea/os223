@@ -8,7 +8,7 @@
 #include <QFile>
 #include <QMap>
 #include <QDebug>
-#include <QBoxLayout>
+#include <QVBoxLayout>
 #include <QRgb>
 #include <QScreen>
 #include <QApplication>

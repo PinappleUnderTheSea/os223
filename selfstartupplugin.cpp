@@ -93,17 +93,22 @@ bool SelfStartupPlugin::pluginIsDisable()
 {
     // 第二个参数 “disabled” 表示存储这个值的键（所有配置都是以键值对的方式存储的）
     // 第三个参数表示默认值，即默认不禁用
-    //return m_proxyInter->getValue(this, "disabled", false).toBool();
-    return !m_pluginWidget->enable();
+    return m_proxyInter->getValue(this, "disabled", false).toBool();
 }
 
 void SelfStartupPlugin::pluginStateSwitched()
 {
-    m_pluginWidget->setEnabled(!m_pluginWidget->enable());
-    if (m_pluginWidget->enabled())
-        m_proxyInter->itemAdded(this, pluginName());
-    else
+    // 获取当前禁用状态的反值作为新的状态值
+    const bool disabledNew = !pluginIsDisable();
+    // 存储新的状态值
+    m_proxyInter->saveValue(this, "disabled", disabledNew);
+
+    // 根据新的禁用状态值处理主控件的加载和卸载
+    if (disabledNew) {
         m_proxyInter->itemRemoved(this, pluginName());
+    } else {
+        m_proxyInter->itemAdded(this, pluginName());
+    }
 }
 
 const QString SelfStartupPlugin::itemContextMenu(const QString &itemKey)
