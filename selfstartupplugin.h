@@ -11,13 +11,13 @@
 #include "aboutdialog.h"
 #include "type.h"
 
-class SelfStarupPlugin : public QObject, PluginsItemInterface
+class SelfStartupPlugin : public QObject, PluginsItemInterface
 {
 private:
     Settings settings;
 
 private:
-    InformationWidget *m_pluginWidget;
+    MainWidget *m_pluginWidget;
     MainWidget *m_appletWidget; 
 
     Q_OBJECT
@@ -27,7 +27,7 @@ private:
     Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "self_startup.json")
 
 public:
-    explicit SelfStarupPlugin(QObject *parent = nullptr);
+    explicit SelfStartupPlugin(QObject *parent = nullptr);
 
     // 返回插件的名称，必须是唯一值，不可以和其它插件冲突
     const QString pluginName() const override;
