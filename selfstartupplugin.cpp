@@ -1,18 +1,18 @@
 #include "selfstartupplugin.h"
 
-SelfStarupPlugin::SelfStarupPlugin(QObject *parent)
+SelfStartupPlugin::SelfStartupPlugin(QObject *parent)
     : QObject(parent)
 {
 
 }
 
-const QString SelfStarupPlugin::pluginName() const
+const QString SelfStartupPlugin::pluginName() const
 {
     return QStringLiteral("self_startup");
 }
 
 //写配置信息
-void SelfStarupPlugin::writeConfig(Settings *settings)
+void SelfStartupPlugin::writeConfig(Settings *settings)
 {
     QMapIterator<QString,QVariant> i(*settings);
     while(i.hasNext())
@@ -22,12 +22,12 @@ void SelfStarupPlugin::writeConfig(Settings *settings)
     }
 }
 
-const QString SelfStarupPlugin::pluginDisplayName() const
+const QString SelfStartupPlugin::pluginDisplayName() const
 {
     return QString("Self Startup");
 }
 
-void SelfStarupPlugin::init(PluginProxyInterface *proxyInter)
+void SelfStartupPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
     m_pluginWidget = new MainWidget;
@@ -39,14 +39,14 @@ void SelfStarupPlugin::init(PluginProxyInterface *proxyInter)
     }
 }
 
-QWidget *SelfStarupPlugin::itemWidget(const QString &itemKey)
+QWidget *SelfStartupPlugin::itemWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
     
     return m_pluginWidget;
 }
 
-QWidget *SelfStarupPlugin::itemPopupApplet(const QString &itemKey)
+QWidget *SelfStartupPlugin::itemPopupApplet(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
@@ -54,7 +54,7 @@ QWidget *SelfStarupPlugin::itemPopupApplet(const QString &itemKey)
 }
 
 
-QIcon SelfStarupPlugin::icon(const DockPart &dockPart, int themeType)
+QIcon SelfStartupPlugin::icon(const DockPart &dockPart, int themeType)
 {
     if (dockPart == DockPart::QuickShow) {
         QIcon icon;
@@ -64,14 +64,14 @@ QIcon SelfStarupPlugin::icon(const DockPart &dockPart, int themeType)
     return QIcon();
 }
 
-void SelfStarupPlugin::about()
+void SelfStartupPlugin::about()
 {
     QMessageBox aboutMB(QMessageBox::NoIcon, "SelfStarupPlugin 1.0", "[About]\n\nDeepin Linux DDE Dock Self-startup plugin.\n");
     aboutMB.setIconPixmap(QPixmap(":/icon.png"));
     aboutMB.exec();
 }
 
-PluginFlags SelfStarupPlugin::flags() const
+PluginFlags SelfStartupPlugin::flags() const
 {
     // 返回的插件为Type_Common-快捷区域插件， Quick_Multi快捷插件显示两列的那种，例如网络和蓝牙
     // Attribute_CanDrag该插件在任务栏上支持拖动，Attribute_CanInsert该插件支持在其前面插入其他的图标
@@ -83,13 +83,13 @@ PluginFlags SelfStarupPlugin::flags() const
         | PluginFlags::Attribute_CanSetting;
 }
 
-bool SelfStarupPlugin::pluginIsAllowDisable()
+bool SelfStartupPlugin::pluginIsAllowDisable()
 {
     // 告诉 dde-dock 本插件允许禁用
     return true;
 }
 
-bool SelfStarupPlugin::pluginIsDisable()
+bool SelfStartupPlugin::pluginIsDisable()
 {
     // 第二个参数 “disabled” 表示存储这个值的键（所有配置都是以键值对的方式存储的）
     // 第三个参数表示默认值，即默认不禁用
@@ -97,7 +97,7 @@ bool SelfStarupPlugin::pluginIsDisable()
     return !m_centralWidget->enabled();
 }
 
-void SelfStarupPlugin::pluginStateSwitched()
+void SelfStartupPlugin::pluginStateSwitched()
 {
     m_centralWidget->setEnabled(!m_centralWidget->enabled());
     if (m_centralWidget->enabled())
@@ -106,7 +106,7 @@ void SelfStarupPlugin::pluginStateSwitched()
         m_proxyInter->itemRemoved(this, pluginName());
 }
 
-const QString SelfStarupPlugin::itemContextMenu(const QString &itemKey)
+const QString SelfStartupPlugin::itemContextMenu(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
@@ -134,7 +134,7 @@ const QString SelfStarupPlugin::itemContextMenu(const QString &itemKey)
     return QJsonDocument::fromVariant(menu).toJson();
 }
 
-void SelfStarupPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
+void SelfStartupPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
 {
     Q_UNUSED(itemKey);
     Q_UNUSED(checked);
