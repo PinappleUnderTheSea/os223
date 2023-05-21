@@ -8,6 +8,11 @@
 #include <QFile>
 #include <QMap>
 #include <QDebug>
+#include <QBoxLayout>
+#include <QRgb>
+#include <QScreen>
+#include <QApplication>
+
 using namespace std;
 
 class MainWidget : public QMainWindow
