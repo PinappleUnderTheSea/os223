@@ -33,7 +33,7 @@ void SelfStartupPlugin::init(PluginProxyInterface *proxyInter)
     m_pluginWidget = new MainWidget;
     m_appletWidget = new MainWidget;
 
-    if (!pluginIsDisable() and m_pluginWidget->enabled()) {
+    if (!pluginIsDisable() and m_pluginWidget->enable()) {
         m_proxyInter->itemAdded(this, pluginName());
         m_proxyInter->requestSetAppletVisible(this, "", true);//set applet visible
     }
@@ -94,12 +94,12 @@ bool SelfStartupPlugin::pluginIsDisable()
     // 第二个参数 “disabled” 表示存储这个值的键（所有配置都是以键值对的方式存储的）
     // 第三个参数表示默认值，即默认不禁用
     //return m_proxyInter->getValue(this, "disabled", false).toBool();
-    return !m_pluginWidget->enabled();
+    return !m_pluginWidget->enable();
 }
 
 void SelfStartupPlugin::pluginStateSwitched()
 {
-    m_pluginWidget->setEnabled(!m_pluginWidget->enabled());
+    m_pluginWidget->setEnabled(!m_pluginWidget->enable());
     if (m_pluginWidget->enabled())
         m_proxyInter->itemAdded(this, pluginName());
     else
