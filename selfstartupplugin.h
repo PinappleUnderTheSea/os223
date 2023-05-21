@@ -6,6 +6,9 @@
 
 #include <QObject>
 #include <QLabel>
+#include <QFile>
+#include <cstdio>
+#include <QDebug>
 
 #include "mainwidget.h"
 #include "aboutdialog.h"
@@ -38,8 +41,8 @@ public:
 
     // 返回插件的 widget
     QWidget *itemWidget(const QString &itemKey) override;
-    // PluginMode status() const override;
-    // QString description() const override;
+    PluginMode status() const override;
+    QString description() const override;
 
     //弹窗
     QWidget *itemPopupApplet(const QString &itemKey) override;
