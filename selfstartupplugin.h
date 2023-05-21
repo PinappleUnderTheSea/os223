@@ -47,7 +47,7 @@ public:
     //弹窗
     QWidget *itemPopupApplet(const QString &itemKey) override;
 
-    QIcon icon(const DockPart &dockPart, int themeType) override;
+    // QIcon icon(const DockPart &dockPart, int themeType) override;
     // PluginFlags flags() const override;
 
     bool pluginIsAllowDisable() override;
