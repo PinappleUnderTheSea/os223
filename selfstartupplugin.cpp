@@ -41,13 +41,13 @@ void SelfStartupPlugin::init(PluginProxyInterface *proxyInter)
 
 QWidget *SelfStartupPlugin::itemWidget(const QString &itemKey)
 {
-    // Q_UNUSED(itemKey);
+    Q_UNUSED(itemKey);
     
-    // return m_pluginWidget;
-    if (itemKey == QUICK_ITEM_KEY)
-    	return m_pluginWidget;
+    return m_pluginWidget;
+    // if (itemKey == QUICK_ITEM_KEY)
+    // 	return m_pluginWidget;
     
-    return nullptr;
+    // return nullptr;
 }
 
 QWidget *SelfStartupPlugin::itemPopupApplet(const QString &itemKey)
