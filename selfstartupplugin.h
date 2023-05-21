@@ -55,7 +55,7 @@ public:
     bool pluginIsDisable() override;
     void pluginStateSwitched() override;
 
-    void about();
+    // void about();
 
     const QString itemContextMenu(const QString &itemKey) override; //TODO
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;   //TODO
