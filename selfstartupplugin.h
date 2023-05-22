@@ -20,7 +20,7 @@ private:
     Settings settings;
 
 private:
-    MainWidget *m_pluginWidget;
+    QLabel *m_pluginWidget;
     MainWidget *m_appletWidget; 
 
     Q_OBJECT

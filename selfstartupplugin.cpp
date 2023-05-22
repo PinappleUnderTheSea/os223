@@ -30,8 +30,12 @@ const QString SelfStartupPlugin::pluginDisplayName() const
 void SelfStartupPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
-    m_pluginWidget = new MainWidget;
+    m_pluginWidget = new QLabel;
     m_appletWidget = new MainWidget;
+
+    font.setFamily("Noto Mono");
+	m_pluginWidget->setFont(font);
+    m_pluginWidget->setText("Startup");
 
     if (!pluginIsDisable()) {
         m_proxyInter->itemAdded(this, pluginName());
