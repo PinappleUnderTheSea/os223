@@ -1,11 +1,11 @@
-#include "aboutdialog.h"
-#include <QApplication>
+// #include "aboutdialog.h"
+// #include <QApplication>
 
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-    aboutDialog w;
-    w.show();
+// int main(int argc, char *argv[])
+// {
+//     QApplication a(argc, argv);
+//     aboutDialog w;
+//     w.show();
 
-    return a.exec();
-}
+//     return a.exec();
+// }
