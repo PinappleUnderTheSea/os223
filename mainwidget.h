@@ -30,6 +30,7 @@ public:
 public:
     int dpi;
     QBoxLayout *centralLayout;
+    QLabel *Label;
     // 字体
     QFont font;
 
