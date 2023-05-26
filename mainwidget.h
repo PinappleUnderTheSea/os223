@@ -23,7 +23,7 @@ class MainWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit MainWidget(Settings&,Dock::Position);
+    explicit MainWidget();
     ~MainWidget();
     QSize sizeHint() const;
 
