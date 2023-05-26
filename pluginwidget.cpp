@@ -30,7 +30,7 @@ QSize PluginWidget::sizeHint() const
     QFont font = qApp->font();
     font.setFamily("Noto Mono");
     QFontMetrics FM(font);
-    return FM.boundingRect(" ↑0.00KB/s ").size() + QSize(0, FM.boundingRect(" ↓0.00KB/s ").height());
+    return FM.boundingRect(" SELF-STARTUP ").size());
 }
 
 void PluginWidget::resizeEvent(QResizeEvent *e)

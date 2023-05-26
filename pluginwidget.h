@@ -22,10 +22,6 @@ private:
     QSize sizeHint() const;
     void resizeEvent(QResizeEvent *e);
     void paintEvent(QPaintEvent *e);
-    QPixmap m_cachedIcon;
-    QString m_cachedTime;
-    QSettings m_settings;
-    bool m_24HourFormat;
 
 };
 
