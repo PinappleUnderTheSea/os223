@@ -11,6 +11,7 @@
 #include <QDebug>
 
 #include "mainwidget.h"
+#include "pluginwidget.h"
 #include "aboutdialog.h"
 #include "type.h"
 
@@ -20,7 +21,7 @@ private:
     Settings settings;
 
 private:
-    QLabel *m_pluginWidget;
+    PluginWidget *m_pluginWidget;
     MainWidget *m_appletWidget; 
 
     Q_OBJECT
