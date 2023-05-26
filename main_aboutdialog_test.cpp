@@ -1,10 +1,10 @@
-// #include "mainwidget.h"
+// #include "aboutdialog.h"
 // #include <QApplication>
 
 // int main(int argc, char *argv[])
 // {
 //     QApplication a(argc, argv);
-//     MainWindow w;
+//     aboutDialog w;
 //     w.show();
 
 //     return a.exec();
