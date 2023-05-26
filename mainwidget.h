@@ -13,11 +13,6 @@
 #include <dde-dock/pluginsiteminterface.h>
 #include "type.h"
 
-
-namespace Ui {
-class MainWidget;
-}
-
 class MainWidget : public QWidget
 {
     Q_OBJECT
@@ -33,10 +28,6 @@ public:
     QLabel *Label;
     // 字体
     QFont font;
-
-
-private:
-    Ui::MainWidget *ui;
 };
 
 #endif // MAINWIDGET_H

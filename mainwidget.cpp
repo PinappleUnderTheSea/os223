@@ -1,8 +1,8 @@
 #include "mainwidget.h"
-#include <DFontSizeManager>
-#include <DGuiApplicationHelper>
+//#include <DFontSizeManager>
+//#include <DGuiApplicationHelper>
 
-DGUI_USE_NAMESPACE
+//DGUI_USE_NAMESPACE
 
 MainWidget::MainWidget()
 {
@@ -27,7 +27,7 @@ MainWidget::MainWidget()
     centralLayout->setMargin(0);
     centralLayout->setSpacing(4);
     setLayout(centralLayout);
-    
+
 }
 
 
