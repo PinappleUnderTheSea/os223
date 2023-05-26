@@ -11,7 +11,7 @@
 #include <QDebug>
 
 #include "appletwidget.h"
-#include "pluginwidget.h"
+#include "mainwidget.h"
 #include "aboutdialog.h"
 #include "type.h"
 
