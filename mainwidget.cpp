@@ -23,14 +23,14 @@ MainWidget::MainWidget()
         centralLayout->setMargin(0);
         setLayout(centralLayout);
     }
-    centralLayout->setSpacing(settings.value("wordSpacingSpinBox").toInt());
-    font.setPixelSize((dpi*settings.value("fontSizeSpinBox").toInt())/72);
+    centralLayout->setSpacing(Settings.value("wordSpacingSpinBox").toInt());
+    font.setPixelSize((dpi*Settings.value("fontSizeSpinBox").toInt())/72);
     Label->setFont(font);
 
     QString style;
     style=QString("QLabel {color: %1;}").arg("#000");
     Label->setStyleSheet(style);
-    
+
     Label->setVisible(true);
     Label->setText(QString("SELF_STARTUP"));
 }
