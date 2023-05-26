@@ -39,6 +39,7 @@ QString getName(){
 AppletWidget::AppletWidget(QWidget *parent) :
     QMainWindow(parent)
 {
+
     setFixedSize(1000,500);
     QString uname = getName();
 
@@ -67,31 +68,37 @@ AppletWidget::AppletWidget(QWidget *parent) :
     //update table
     update();
     
-
+    qDebug()<<"applet1";
     // set contents
     int i=0;
-    for(auto it = selfSetUp.begin();it != selfSetUp.end();it++) //to_do
+    for(auto it = selfSetUp.begin();it != selfSetUp.end(); it++) //to_do
     {
         // add button group
-        if(Btngroups[i] != NULL)
-        {
-            delete(Btngroups[i]);
-        }
-        QButtonGroup * m_pButtonGroup = new QButtonGroup(this);
-        Btngroups[i] = m_pButtonGroup;
+        qDebug()<<"applet1--";
 
+        QButtonGroup * m_pButtonGroup = new QButtonGroup(this);
+
+        if(i >= Btngroups.size())
+        {
+            Btngroups.push_back(m_pButtonGroup);
+        }else{
+            if(Btngroups[i] != NULL)
+                delete(Btngroups[i]);
+            Btngroups[i] = m_pButtonGroup;
+        }
+        qDebug()<<"applet2";
         //set table content
         tableModel->setItem(i, 0, new QStandardItem(it.key()));// to_do
         tableModel->setItem(i, 1, new QStandardItem());
         tableModel->setItem(i, 2, new QStandardItem());
-
+        qDebug()<<"applet3";
         // add button to the last column
         QRadioButton *button0 = new QRadioButton();
         QRadioButton *button1 = new QRadioButton();
 
         m_pButtonGroup->addButton(button0,0);
         m_pButtonGroup->addButton(button1,1);
-
+        qDebug()<<"applet4";
         //set button property
         button0->setProperty("index", 2*i);
         button1->setProperty("index", 2*i + 1);
@@ -107,7 +114,7 @@ AppletWidget::AppletWidget(QWidget *parent) :
         {
             button1->setChecked(1);
         }
-
+        qDebug()<<"applet5";
         // set click event
         connect(Btngroups[i], SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
 
@@ -116,6 +123,7 @@ AppletWidget::AppletWidget(QWidget *parent) :
         tableView->setIndexWidget(tableModel->index(tableModel->rowCount()-1,2),button1);
         i++;
     }
+    qDebug()<<"applet6";
 }
 
 void AppletWidget::onButtonClicked(QAbstractButton *button)
