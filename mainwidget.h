@@ -18,7 +18,6 @@ public:
     explicit MainWidget(QWidget *parent = nullptr);
     ~MainWidget();
     QVector<QString> searchAll();
-    QVector<QString> globalsearch();
 
     void update();
     QPair<QString, bool> readfiles(QString);
