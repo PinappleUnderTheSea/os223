@@ -10,8 +10,8 @@ class PluginWidget : public QWidget
 
 public:
     explicit PluginWidget(QWidget *parent = 0);
-    bool enabled();
-    void setEnabled(const bool b);
+    // bool enabled();
+    // void setEnabled(const bool b);
     QString text;
     // int mp, cp;
 

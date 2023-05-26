@@ -5,7 +5,6 @@
 #include <QDebug>
 #include <QMouseEvent>
 
-#define PLUGIN_STATE_KEY    "enable"
 
 PluginWidget::PluginWidget(QWidget *parent)
     : QWidget(parent)
@@ -15,22 +14,12 @@ PluginWidget::PluginWidget(QWidget *parent)
     // cp = 0;
 }
 
-bool PluginWidget::enabled()
-{
-    return m_settings.value(PLUGIN_STATE_KEY, true).toBool();
-}
-
-void PluginWidget::setEnabled(const bool b)
-{
-    m_settings.setValue(PLUGIN_STATE_KEY, b);
-}
-
 QSize PluginWidget::sizeHint() const
 {
     QFont font = qApp->font();
     font.setFamily("Noto Mono");
     QFontMetrics FM(font);
-    return FM.boundingRect(" SELF-STARTUP ").size());
+    return FM.boundingRect(" SELF-STARTUP ").size();
 }
 
 void PluginWidget::resizeEvent(QResizeEvent *e)
