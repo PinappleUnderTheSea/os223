@@ -35,7 +35,7 @@ void SelfStartupPlugin::init(PluginProxyInterface *proxyInter)
 
     if (!pluginIsDisable()) {
         m_proxyInter->itemAdded(this, pluginName());
-        m_proxyInter->requestSetAppletVisible(this, "", true);//set applet visible
+        // m_proxyInter->requestSetAppletVisible(this, "", true);//set applet visible
     }
 }
 
@@ -131,7 +131,7 @@ const QString SelfStartupPlugin::itemContextMenu(const QString &itemKey)
 
     QMap<QString, QVariant> about;
     about["itemId"] = "about";
-    about["itemText"] = "关于";
+    about["itemText"] = "about";
     about["isActive"] = true;
     items.push_back(about);
 
