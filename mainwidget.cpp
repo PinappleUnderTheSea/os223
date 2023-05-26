@@ -8,15 +8,17 @@
 #include <QDebug>
 #include "mainwidget.h"
 #include <dirent.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <fstream>
-
+#include <qfiledialog.h>
 
 QString getName(){
 
     DIR *pDir;
     struct dirent* ptr;
     if(!(pDir = opendir("/home"))){
-        qDebug()<<"home doesn't Exist!"<<endl;
+        qDebug()<<"home doesn't Exist!"<<Qt::endl;
         return "Get user Name err";
     }
 //    qDebug() << " 111";
@@ -62,16 +64,21 @@ MainWidget::MainWidget(QWidget *parent) :
     tableView->setColumnWidth(1,150);
     tableView->setColumnWidth(2,150);
 
-    //update
+    //update table
     update();
+    
 
     // set contents
     int i=0;
     for(auto it = selfSetUp.begin();it != selfSetUp.end();it++) //to_do
     {
         // add button group
+        if(Btngroups[i] != NULL)
+        {
+            delete(Btngroups[i]);
+        }
         QButtonGroup * m_pButtonGroup = new QButtonGroup(this);
-        Btngroups.push_back(m_pButtonGroup);
+        Btngroups[i] = m_pButtonGroup;
 
         //set table content
         tableModel->setItem(i, 0, new QStandardItem(it.key()));// to_do
@@ -102,7 +109,7 @@ MainWidget::MainWidget(QWidget *parent) :
         }
 
         // set click event
-        connect(m_pButtonGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
+        connect(Btngroups[i], SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
 
         // insert the buttons
         tableView->setIndexWidget(tableModel->index(tableModel->rowCount()-1,1),button0);
@@ -152,6 +159,16 @@ void MainWidget::showPaths(){
     }
 }
 
+QString MainWidget::getFileName(QString path){
+    int index;
+    for(index = path.length()-1;index>=0;index--){
+        if(path[index]=="/"){
+            break;
+        }
+    }
+    return path.right(path.length()-index-1);
+}
+
 QPair<QString, bool> MainWidget::readfiles(QString filename){
 //    qDebug() << filename;
     QFile file(filename);
@@ -161,6 +178,7 @@ QPair<QString, bool> MainWidget::readfiles(QString filename){
     QTextStream in(&file);
     QString line;
     QPair<QString, bool> ret;
+    ret.second = false;
 //    qDebug() << in.atEnd();
     int nm=1;
     while(!in.atEnd()){
@@ -186,7 +204,7 @@ void MainWidget::update(){
     DIR *pDir;
     struct dirent* ptr;
     if(!(pDir = opendir((QString("/data/home/")+username+QString("/.config/autostart")).toStdString().c_str()))){
-        qDebug()<<"Folder doesn't Exist!"<<endl;
+        qDebug()<<"Folder doesn't Exist!"<<Qt::endl;
         return;
     }
     while((ptr = readdir(pDir))!=0) {
@@ -213,7 +231,7 @@ QVector<QString> MainWidget::searchAll() {
     struct dirent* ptr;
     if(!(pDir = opendir("/opt/apps"))){
         qDebug()<<"Folder doesn't Exist!"<<endl;
-        return QVector<QString>(0, "No app");
+        return QVector<QString>(0);
     }
     QVector<QString> apps;
 
@@ -227,7 +245,7 @@ QVector<QString> MainWidget::searchAll() {
         DIR *subDir;
         struct dirent *subptr;
         if(!(subDir = opendir((path + '/' + ptr->d_name + "/entries/applications").c_str() ))){
-            qDebug()<<"Folder doesn't Exist!"<<endl;
+            qDebug()<<"Folder doesn't Exist!"<<Qt::endl;
             continue;
         }
         while((subptr = readdir(subDir))!=0){
@@ -365,3 +383,61 @@ QString MainWidget::enable(QString name) {
 
 }
 
+
+void MainWidget::getAllFiles(QString path)
+{
+    DIR *pDir;
+    struct dirent* ptr;
+
+    if(!(pDir = opendir(path.toStdString().c_str()))){
+//        qDebug()<<"Folder doesn't Exist!"<<endl;
+        return;
+    }
+    while((ptr = readdir(pDir))!=0) {
+        if (strcmp(ptr->d_name, ".") != 0 && strcmp(ptr->d_name, "..") != 0){
+            string filepath = path.toStdString() + "/" + ptr->d_name;
+            if (path == QString("/")){
+                qDebug() << QString(filepath.c_str());
+            }
+            struct stat buf;
+            stat(filepath.c_str(), &buf);
+            if(S_ISDIR(buf.st_mode)){
+                getAllFiles(QString(filepath.c_str()));
+            }else if(QString(filepath.c_str()).right(8) != ".desktop"){
+                continue;
+            }else{
+                QPair<QString, bool> ans = readfiles(QString(filepath.c_str()));
+                name_path[ans.first] = QString(filepath.c_str());
+                qDebug() << path;
+            }
+        }
+    }
+    closedir(pDir);
+}
+
+void MainWidget::globalSearch(){
+    getAllFiles(QString("/"));
+}
+
+void MainWidget::Manual(){
+    QFileDialog *fileDialog = new QFileDialog(this);
+    fileDialog->setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::Files);
+    fileDialog->setFileMode(QFileDialog::ExistingFile);
+    fileDialog->exec();
+    auto selectDir = fileDialog->selectedFiles();
+    if (selectDir.size()>0)
+    {
+        QString path = selectDir.at(0);
+        qDebug() << "Path:" << selectDir;
+        if(path.right(8) == ".desktop"){
+            QPair<QString, bool> ans = readfiles(path);
+            name_path[ans.first] = path;
+            selfSetUp[ans.first] = false;
+        }else{
+            QString ans = getFileName(path);
+            name_path[ans] = path;
+        }
+        return;
+    }
+    qDebug() << "Not Executable";
+}
