@@ -4,7 +4,7 @@
 
 DGUI_USE_NAMESPACE
 
-MainWidget::MainWidget(Settings& settings,Dock::Position position)
+MainWidget::MainWidget()
 {
     centralLayout=NULL;
     //setMinimumSize(5,5);
