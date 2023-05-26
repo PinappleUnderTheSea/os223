@@ -18,13 +18,13 @@ MainWidget::MainWidget()
         qDebug()<<"创建新的文字ui";
         Label=new QLabel();
         Label->setAlignment(Qt::AlignCenter);
-        centralLayout = new QBoxLayout(QBoxLayout::LeftToRight:QBoxLayout::TopToBottom);
+        centralLayout = new QBoxLayout(QBoxLayout::LeftToRight);
         centralLayout->addWidget(Label);
         centralLayout->setMargin(0);
         setLayout(centralLayout);
     }
-    centralLayout->setSpacing(Settings.value("wordSpacingSpinBox").toInt());
-    font.setPixelSize((dpi*Settings.value("fontSizeSpinBox").toInt())/72);
+    centralLayout->setSpacing(4);
+    font.setPixelSize((dpi*9)/72);
     Label->setFont(font);
 
     QString style;
