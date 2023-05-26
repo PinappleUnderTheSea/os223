@@ -52,7 +52,9 @@ QWidget *SelfStartupPlugin::itemWidget(const QString &itemKey)
 
 QWidget *SelfStartupPlugin::itemPopupApplet(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
+    if (itemKey != "self_startup") {
+        return nullptr;
+    }
 
     return m_appletWidget;
 }
