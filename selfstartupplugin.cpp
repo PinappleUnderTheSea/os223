@@ -1,5 +1,50 @@
 #include "selfstartupplugin.h"
 
+//设置选项和默认值,静态全局变量
+struct SettingItem SysMonitorPlugin::settingItems[]={
+//全局设置选项
+{"chartModeCheckBox",0},//图表模式开关
+{"batInfoComboBox",0},//气泡电池信息开关
+{"updateIntervalSpinBox",1000},//更新间隔ms
+
+//文字模式设置选项
+{"displayContentComboBox",DisplayContentSetting::ALL},
+{"wordSpacingSpinBox",4},
+{"cpuDiyWordLineEdit",QString("CPU:")},
+{"memDiyWordLineEdit",QString("MEM:")},
+{"upNetspeedDiyWordLineEdit",QString("▴")},
+{"downNetspeedDiyWordLineEdit",QString("▾")},
+{"fontSizeSpinBox",9},
+{"fontColorComboBox",0},
+
+//图表模式设置选项
+//默认三个图表都是打开的
+{"netChartCheckBox",1},{"cpuChartCheckBox",1},{"memChartCheckBox",1},
+{"chartSpacingSpinBox",1},
+//net图表设置
+{"netUpTopSpinBox",500},//上传
+{"netUpWidget",QColor(0,78,239,200)},
+{"netDownTopSpinBox",500},//下载
+{"netDownWidget",QColor(225,67,0,200)},
+{"netBorderRoundSpinBox",30},//边框
+{"netBorderWidget",QColor(255,255,255,0)},
+{"netBackgroundWidget",QColor(0,0,0,128)},//背景
+{"netWidthSpinBox",40},{"netHeightSpinBox",28},//宽度高度
+//cpu图表设置
+{"cpuWorkWidget",QColor(250,74,74,255)},
+{"cpuBorderRoundSpinBox",30},//边框
+{"cpuBorderWidget",QColor(255,255,255,0)},
+{"cpuBackgroundWidget",QColor(0,0,0,128)},//背景
+{"cpuWidthSpinBox",40},{"cpuHeightSpinBox",28},//宽度高度
+//mem图表设置
+{"memUsedWidget",QColor(21,199,195,255)},
+{"memBorderRoundSpinBox",30},//边框
+{"memBorderWidget",QColor(255,255,255,0)},
+{"memBackgroundWidget",QColor(0,0,0,128)},//背景
+{"memWidthSpinBox",40},{"memHeightSpinBox",28}//宽度高度
+                                                                 };
+
+
 SelfStartupPlugin::SelfStartupPlugin(QObject *parent)
     : QObject(parent)
 {
