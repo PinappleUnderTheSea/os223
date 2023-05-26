@@ -30,8 +30,8 @@ const QString SelfStartupPlugin::pluginDisplayName() const
 void SelfStartupPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
-    m_pluginWidget = new PluginWidget;
-    m_appletWidget = new MainWidget;
+    m_pluginWidget = new MainWidget;
+    m_appletWidget = new AppletWidget;
 
     if (!pluginIsDisable()) {
         m_proxyInter->itemAdded(this, pluginName());
@@ -44,6 +44,7 @@ QWidget *SelfStartupPlugin::itemWidget(const QString &itemKey)
     Q_UNUSED(itemKey);
     
     return m_pluginWidget;
+
     // if (itemKey == QUICK_ITEM_KEY)
     // 	return m_pluginWidget;
     
@@ -52,9 +53,7 @@ QWidget *SelfStartupPlugin::itemWidget(const QString &itemKey)
 
 QWidget *SelfStartupPlugin::itemPopupApplet(const QString &itemKey)
 {
-    if (itemKey != "self_startup") {
-        return nullptr;
-    }
+    Q_UNUSED(itemKey);
 
     return m_appletWidget;
 }

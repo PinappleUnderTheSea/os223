@@ -10,7 +10,7 @@
 #include <cstdio>
 #include <QDebug>
 
-#include "mainwidget.h"
+#include "appletwidget.h"
 #include "pluginwidget.h"
 #include "aboutdialog.h"
 #include "type.h"
@@ -21,8 +21,8 @@ private:
     Settings settings;
 
 private:
-    PluginWidget *m_pluginWidget;
-    MainWidget *m_appletWidget; 
+    MainWidget *m_pluginWidget;
+    AppletWidget *m_appletWidget; 
 
     Q_OBJECT
     // 声明实现了的接口

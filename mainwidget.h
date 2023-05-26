@@ -1,48 +1,55 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-#include <QtGlobal>
-#include <QMainWindow>
-#include <vector>
-#include <unordered_map>
-#include <QButtonGroup>
-#include <QFile>
-#include <QMap>
-#include <QDebug>
-#include <QVBoxLayout>
+#ifndef MAINWIDGET_H
+#define MAINWIDGET_H
+
+#include <QWidget>
+#include <QLabel>
+#include <QTimer>
+#include <QObject>
+#include <QBoxLayout>
 #include <QRgb>
+#include <QDebug>
 #include <QScreen>
 #include <QApplication>
+#include <dde-dock/pluginsiteminterface.h>
+#include "streamchart.h"
+#include "type.h"
 
-using namespace std;
+extern struct SettingItem settingItems[];
 
-class MainWidget : public QMainWindow
+namespace Ui {
+class MainWidget;
+}
+
+class MainWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit MainWidget(QWidget *parent = nullptr);
+    explicit MainWidget(Settings&,Dock::Position);
     ~MainWidget();
-    QVector<QString> searchAll();
+    void UpdateData(const Info& info,Dock::Position position,const Settings& settings);
+    QSize sizeHint() const;
 
-    void update();
-    QPair<QString, bool> readfiles(QString);
-    QString disable(QString);
-    QString enable(QString);
-    QString getFileName(QString);
-    void getAllFiles(QString);
-    void globalSearch();
-    void Manual();
-    void showApps();
-    void showPaths();
+public:
+    int dpi;
+    QBoxLayout *centralLayout;
+    // 文字模式数据显示在这2个Label上
+    QLabel *cpuMemLabel,*netLabel;
+    //显示数据的图表类
+    StreamChart *netChart,*cpuChart,*memChart;
+    struct Data data;
+    // 字体
+    QFont font;
+    //保存之前的设置
+    Settings oldsettings;
+    //保存之前的位置
+    Dock::Position oldposition;
+
 
 private:
-    std::vector<QButtonGroup*> Btngroups;
-    QMap<QString, bool> selfSetUp;
-    QMap<QString, QString> name_path;
-    QString username;
-protected slots:
-    void onButtonClicked(QAbstractButton *button);
-
+    Ui::MainWidget *ui;
+    void initLabels(void);
+    void initChart(void);
 };
 
-#endif // MAINWINDOW_H
+#endif // MAINWIDGET_H
