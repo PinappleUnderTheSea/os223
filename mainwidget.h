@@ -18,10 +18,16 @@ public:
     explicit MainWidget(QWidget *parent = nullptr);
     ~MainWidget();
     QVector<QString> searchAll();
+    QVector<QString> globalsearch();
+
     void update();
     QPair<QString, bool> readfiles(QString);
     QString disable(QString);
     QString enable(QString);
+    QString getFileName(QString);
+    void getAllFiles(QString);
+    void globalSearch();
+    void Manual();
     void showApps();
     void showPaths();
 private:
