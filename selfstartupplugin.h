@@ -57,8 +57,6 @@ public:
     void pluginStateSwitched() override;
 
     // void about();
-    void readConfig(Settings *settings);
-    void writeConfig(Settings *settings);
 
     const QString itemContextMenu(const QString &itemKey) override; //TODO
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;   //TODO

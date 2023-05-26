@@ -25,8 +25,8 @@ MainWidget::MainWidget()
     centralLayout = new QBoxLayout(QBoxLayout::LeftToRight);
     centralLayout->addWidget(Label);
     centralLayout->setMargin(0);
-    setLayout(centralLayout);
     centralLayout->setSpacing(4);
+    setLayout(centralLayout);
     
 }
 
