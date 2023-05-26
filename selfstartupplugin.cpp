@@ -32,14 +32,10 @@ void SelfStartupPlugin::init(PluginProxyInterface *proxyInter)
     m_proxyInter = proxyInter;
     m_pluginWidget = new MainWidget;
     m_appletWidget = new AppletWidget;
-    qDebug()<<"self init1";
     if (!pluginIsDisable()) {
-        qDebug()<<"self init2";
         m_proxyInter->itemAdded(this, pluginName());
-        qDebug()<<"self init3";
         // m_proxyInter->requestSetAppletVisible(this, "", true);//set applet visible
     }
-    qDebug()<<"self init4";
 }
 
 QWidget *SelfStartupPlugin::itemWidget(const QString &itemKey)
