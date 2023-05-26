@@ -12,6 +12,27 @@ MainWidget::MainWidget()
     font.setFamily("Noto Mono");
     // 获取dpi，一般默认都是96，根据dpi进行字体的缩放，直接设置pointsize无法解决hidpi问题
     dpi = QApplication::primaryScreen()->logicalDotsPerInch();
+    if(centralLayout==NULL)
+    {
+        //创建新的ui
+        qDebug()<<"创建新的文字ui";
+        Label=new QLabel();
+        Label->setAlignment(Qt::AlignCenter);
+        centralLayout = new QBoxLayout(QBoxLayout::LeftToRight:QBoxLayout::TopToBottom);
+        centralLayout->addWidget(Label);
+        centralLayout->setMargin(0);
+        setLayout(centralLayout);
+    }
+    centralLayout->setSpacing(settings.value("wordSpacingSpinBox").toInt());
+    font.setPixelSize((dpi*settings.value("fontSizeSpinBox").toInt())/72);
+    Label->setFont(font);
+
+    QString style;
+    style=QString("QLabel {color: %1;}").arg("#000");
+    Label->setStyleSheet(style);
+    
+    Label->setVisible(true);
+    Label->setText(QString("SELF_STARTUP"));
 }
 
 MainWidget::~MainWidget()
