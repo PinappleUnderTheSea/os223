@@ -132,6 +132,8 @@ AppletWidget::AppletWidget(QWidget *parent) :
     QPushButton * btn_del = new QPushButton("-", this);
     btn_del->resize(30,30);
     btn_del->move(30,0);
+
+    connect(btn_add, SIGNAL(clicked()), this, SLOT(addButtonClicked()));
 }
 
 void AppletWidget::onButtonClicked(QAbstractButton *button)
@@ -156,6 +158,12 @@ void AppletWidget::onButtonClicked(QAbstractButton *button)
         QString strStatus = pButton->isChecked() ? "Checked" : "Unchecked";
         qDebug() << QString("Button : %1 is %2").arg(pButton->property("index").toInt()).arg(strStatus);
     }
+}
+
+void AppletWidget::addButtonClicked()
+{
+    // add button
+    Manual();
 }
 
 AppletWidget::~AppletWidget()
