@@ -42,6 +42,7 @@ private:
     QString username;
 protected slots:
     void onButtonClicked(QAbstractButton *button);
+    void addButtonClicked();
 
 };
 
