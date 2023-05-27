@@ -12,6 +12,7 @@
 #include <sys/stat.h>
 #include <fstream>
 #include <qfiledialog.h>
+#include<QPushButton>
 
 QString getName(){
 
@@ -124,6 +125,13 @@ AppletWidget::AppletWidget(QWidget *parent) :
         i++;
     }
     qDebug()<<"applet6";
+
+    //add + - button
+    QPushButton * btn_add = new QPushButton("+", this);
+    btn_add->resize(30,30);
+    QPushButton * btn_del = new QPushButton("-", this);
+    btn_del->resize(30,30);
+    btn_del->move(30,0);
 }
 
 void AppletWidget::onButtonClicked(QAbstractButton *button)
