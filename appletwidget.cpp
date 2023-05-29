@@ -41,13 +41,13 @@ AppletWidget::AppletWidget(QWidget *parent) :
     QMainWindow(parent)
 {
 
-    setFixedSize(1000,500);
+    setFixedSize(500,700);
     QString uname = getName();
 
     username = uname;
     // add tableview
     QTableView *tableView = new QTableView(this);
-    tableView->setMinimumSize(1000,500);
+    tableView->setMinimumSize(500,700);
     tableView->verticalHeader()->hide(); // hide row number
 
     QStandardItemModel *tableModel = new QStandardItemModel(this);
@@ -62,9 +62,9 @@ AppletWidget::AppletWidget(QWidget *parent) :
 
     //colum width
     //tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    tableView->setColumnWidth(0,700);
-    tableView->setColumnWidth(1,150);
-    tableView->setColumnWidth(2,150);
+    tableView->setColumnWidth(0,280);
+    tableView->setColumnWidth(1,110);
+    tableView->setColumnWidth(2,110);
 
     //update table
     update();
