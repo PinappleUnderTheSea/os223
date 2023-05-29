@@ -3,6 +3,7 @@
         "*.ui": "cpp",
         "memory": "cpp",
         "xhash": "cpp",
-        "xlocnum": "cpp"
+        "xlocnum": "cpp",
+        "vector": "cpp"
     }
 }

@@ -11,7 +11,6 @@
 #include <QScreen>
 #include <QApplication>
 #include <dde-dock/pluginsiteminterface.h>
-#include "type.h"
 
 class MainWidget : public QWidget
 {

@@ -13,7 +13,6 @@
 #include "appletwidget.h"
 #include "mainwidget.h"
 #include "aboutdialog.h"
-#include "type.h"
 
 class SelfStartupPlugin : public QObject, PluginsItemInterface
 {
