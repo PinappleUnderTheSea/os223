@@ -18,7 +18,7 @@ QString getName(){
     DIR *pDir;
     struct dirent* ptr;
     if(!(pDir = opendir("/home"))){
-        qDebug()<<"home doesn't Exist!"<<Qt::endl;
+        qDebug()<<"home doesn't Exist!"<<endl;
         return "Get user Name err";
     }
 //    qDebug() << " 111";
@@ -64,21 +64,16 @@ MainWidget::MainWidget(QWidget *parent) :
     tableView->setColumnWidth(1,150);
     tableView->setColumnWidth(2,150);
 
-    //update table
+    //update
     update();
-    
 
     // set contents
     int i=0;
     for(auto it = selfSetUp.begin();it != selfSetUp.end();it++) //to_do
     {
         // add button group
-        if(Btngroups[i] != NULL)
-        {
-            delete(Btngroups[i]);
-        }
         QButtonGroup * m_pButtonGroup = new QButtonGroup(this);
-        Btngroups[i] = m_pButtonGroup;
+        Btngroups.push_back(m_pButtonGroup);
 
         //set table content
         tableModel->setItem(i, 0, new QStandardItem(it.key()));// to_do
@@ -109,7 +104,7 @@ MainWidget::MainWidget(QWidget *parent) :
         }
 
         // set click event
-        connect(Btngroups[i], SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
+        connect(m_pButtonGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
 
         // insert the buttons
         tableView->setIndexWidget(tableModel->index(tableModel->rowCount()-1,1),button0);
@@ -204,7 +199,7 @@ void MainWidget::update(){
     DIR *pDir;
     struct dirent* ptr;
     if(!(pDir = opendir((QString("/data/home/")+username+QString("/.config/autostart")).toStdString().c_str()))){
-        qDebug()<<"Folder doesn't Exist!"<<Qt::endl;
+        qDebug()<<"Folder doesn't Exist!"<<endl;
         return;
     }
     while((ptr = readdir(pDir))!=0) {
@@ -245,7 +240,7 @@ QVector<QString> MainWidget::searchAll() {
         DIR *subDir;
         struct dirent *subptr;
         if(!(subDir = opendir((path + '/' + ptr->d_name + "/entries/applications").c_str() ))){
-            qDebug()<<"Folder doesn't Exist!"<<Qt::endl;
+            qDebug()<<"Folder doesn't Exist!"<<endl;
             continue;
         }
         while((subptr = readdir(subDir))!=0){
