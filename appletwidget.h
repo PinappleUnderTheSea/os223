@@ -40,6 +40,8 @@ private:
     QMap<QString, bool> selfSetUp;
     QMap<QString, QString> name_path;
     QString username;
+    QTableView *tableView;
+    StandardItemModel *tableModel;
 protected slots:
     void onButtonClicked(QAbstractButton *button);
     void addButtonClicked();
