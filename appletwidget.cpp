@@ -1,6 +1,4 @@
-#include <QTableView>
 #include <QHeaderView>
-#include <QStandardItemModel>
 #include <QStringList>
 #include <QString>
 #include <QRadioButton>

@@ -12,6 +12,8 @@
 #include <QRgb>
 #include <QScreen>
 #include <QApplication>
+#include <QStandardItemModel>
+#include <QTableView>
 
 using namespace std;
 
@@ -42,7 +44,7 @@ private:
     QMap<QString, QString> name_path;
     QString username;
     QTableView *tableView;
-    StandardItemModel *tableModel;
+    QStandardItemModel *tableModel;
 protected slots:
     void onButtonClicked(QAbstractButton *button);
     void addButtonClicked();
