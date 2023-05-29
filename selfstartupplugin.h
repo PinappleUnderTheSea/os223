@@ -17,9 +17,6 @@
 class SelfStartupPlugin : public QObject, PluginsItemInterface
 {
 private:
-    Settings settings;
-
-private:
     MainWidget *m_pluginWidget;
     AppletWidget *m_appletWidget; 
 

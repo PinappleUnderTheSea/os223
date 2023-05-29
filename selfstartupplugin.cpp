@@ -12,15 +12,15 @@ const QString SelfStartupPlugin::pluginName() const
 }
 
 //写配置信息
-void SelfStartupPlugin::writeConfig(Settings *settings)
-{
-    QMapIterator<QString,QVariant> i(*settings);
-    while(i.hasNext())
-    {
-        i.next();
-        m_proxyInter->saveValue(this,i.key(),i.value());
-    }
-}
+// void SelfStartupPlugin::writeConfig(Settings *settings)
+// {
+//     QMapIterator<QString,QVariant> i(*settings);
+//     while(i.hasNext())
+//     {
+//         i.next();
+//         m_proxyInter->saveValue(this,i.key(),i.value());
+//     }
+// }
 
 const QString SelfStartupPlugin::pluginDisplayName() const
 {
@@ -122,12 +122,6 @@ const QString SelfStartupPlugin::itemContextMenu(const QString &itemKey)
     QList<QVariant> items;
     items.reserve(2);
 
-    // QMap<QString, QVariant> setting;
-    // setting["itemId"] = "setting";
-    // setting["itemText"] = "设置";
-    // setting["isActive"] = true;
-    // items.push_back(setting);
-
     QMap<QString, QVariant> about;
     about["itemId"] = "about";
     about["itemText"] = "about";
@@ -147,17 +141,6 @@ void SelfStartupPlugin::invokedMenuItem(const QString &itemKey, const QString &m
 {
     Q_UNUSED(itemKey);
     Q_UNUSED(checked);
-
-    // 根据上面接口设置的 id 执行不同的操作
-    // if(menuId == "setting")
-    // {
-    //     pluginSettingDialog setting(&settings);
-    //     if(setting.exec()==QDialog::Accepted)
-    //     {
-    //         setting.getDisplayContentSetting(&settings);
-    //         writeConfig(&settings);
-    //     }
-    // }
 
     if (menuId == "about")
     {
