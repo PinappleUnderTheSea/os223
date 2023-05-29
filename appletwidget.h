@@ -43,6 +43,7 @@ private:
 protected slots:
     void onButtonClicked(QAbstractButton *button);
     void addButtonClicked();
+    void delButtonClicked(QAbstractButton *button);
 
 };
 

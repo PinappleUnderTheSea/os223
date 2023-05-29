@@ -134,6 +134,7 @@ AppletWidget::AppletWidget(QWidget *parent) :
     btn_del->move(30,0);
 
     connect(btn_add, SIGNAL(clicked()), this, SLOT(addButtonClicked()));
+    connect(btn_del, SIGNAL(clicked()), this, SLOT(delButtonClicked(QAbstractButton*)));
 }
 
 void AppletWidget::onButtonClicked(QAbstractButton *button)
@@ -164,6 +165,15 @@ void AppletWidget::addButtonClicked()
 {
     // add button
     Manual();
+}
+
+void AppletWidget::delButtonClicked(QAbstractButton *button)
+{
+    // now button
+    qDebug() << button->property("index").toInt() << Qt::endl;
+
+    // functions         TODO
+    
 }
 
 AppletWidget::~AppletWidget()

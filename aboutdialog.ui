@@ -66,7 +66,7 @@
     <string notr="true">font: 70 15pt &quot;Noto Sans CJK SC&quot;;</string>
    </property>
    <property name="text">
-    <string>DDE 控制中心自启动管理插件</string>
+    <string>DDE 自启动管理插件</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
