@@ -34,6 +34,7 @@ public:
     void Manual();
     void showApps();
     void showPaths();
+    void update_widget();
 
 private:
     std::vector<QButtonGroup*> Btngroups;

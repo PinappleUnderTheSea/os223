@@ -44,8 +44,8 @@ QSize MainWidget::sizeHint() const
 {
     if(centralLayout==NULL)return QSize(100,30);
     int w,h;
-    w=QFontMetrics(font).boundingRect(QString("SELF-STARTUP")).size().width();
-    h=QFontMetrics(font).boundingRect(QString("SELF-STARTUP")).size().height();
+    w=QFontMetrics(font).boundingRect(QString("SELF_STARTUP")).size().width();
+    h=QFontMetrics(font).boundingRect(QString("SELF_STARTUP")).size().height();
     QSize size(w,h);
     //qDebug()<<size;
     //qDebug()<<QString("width:%1    height:%2").arg(width()).arg(height());
