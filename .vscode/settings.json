@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "*.ui": "cpp"
+        "*.ui": "cpp",
+        "memory": "cpp",
+        "xhash": "cpp",
+        "xlocnum": "cpp"
     }
 }
