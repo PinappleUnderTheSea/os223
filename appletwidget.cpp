@@ -46,11 +46,24 @@ AppletWidget::AppletWidget(QWidget *parent) :
 
     username = uname;
     // add tableview
-    QTableView *tableView = new QTableView(this);
+    update_widget();
+}
+
+void AppletWidget::update_widget()
+{
+    if(tableView != NULL)
+    {
+        delete(tableView);
+    }
+    if(tableModel != NULL)
+    {
+        delete(tableModel);
+    }
+    tableView = new QTableView(this);
     tableView->setMinimumSize(500,700);
     tableView->verticalHeader()->hide(); // hide row number
 
-    QStandardItemModel *tableModel = new QStandardItemModel(this);
+    tableModel = new QStandardItemModel(this);
     tableView->setModel(tableModel);// recommend to set model before detail settings
 
     //set columns
@@ -135,6 +148,7 @@ AppletWidget::AppletWidget(QWidget *parent) :
 
     connect(btn_add, SIGNAL(clicked()), this, SLOT(addButtonClicked()));
     connect(btn_del, SIGNAL(clicked()), this, SLOT(delButtonClicked(QAbstractButton*)));
+
 }
 
 void AppletWidget::onButtonClicked(QAbstractButton *button)
@@ -165,6 +179,7 @@ void AppletWidget::addButtonClicked()
 {
     // add button
     Manual();
+    update_widget();
 }
 
 void AppletWidget::delButtonClicked(QAbstractButton *button)
@@ -173,12 +188,20 @@ void AppletWidget::delButtonClicked(QAbstractButton *button)
     qDebug() << button->property("index").toInt() << Qt::endl;
 
     // functions         TODO
+    update_widget();
     
 }
 
 AppletWidget::~AppletWidget()
 {
-
+    if(tableView != NULL)
+    {
+        delete(tableView);
+    }
+    if(tableModel != NULL)
+    {
+        delete(tableModel);
+    }
 }
 
 void AppletWidget::showApps(){
