@@ -38,7 +38,7 @@ QString getName(){
 AppletWidget::AppletWidget(QWidget *parent) :
     QMainWindow(parent)
 {
-
+    qDebug()<<"enter applet init"<<Qt::endl;
     setFixedSize(500,700);
     QString uname = getName();
 
@@ -49,6 +49,7 @@ AppletWidget::AppletWidget(QWidget *parent) :
 
 void AppletWidget::update_widget()
 {
+    qDebug()<<"enter applet init"<<Qt::endl;
     if(tableView != NULL)
     {
         delete(tableView);
