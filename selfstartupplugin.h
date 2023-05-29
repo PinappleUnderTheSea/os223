@@ -46,7 +46,7 @@ public:
 
     // QIcon icon(const DockPart &dockPart, int themeType) override;
     // PluginFlags flags() const override;
-    void writeConfig(Settings *settings);
+    // void writeConfig(Settings *settings);
 
     bool pluginIsAllowDisable() override;
     bool pluginIsDisable() override;
