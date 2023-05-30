@@ -144,13 +144,11 @@ void AppletWidget::update_widget()
     }
     qDebug()<<"applet6";
 
-    //add + - button
+    //add + button
     QPushButton * btn_add = new QPushButton("+", this);
     btn_add->resize(30,30);
-    
 
     connect(btn_add, SIGNAL(clicked()), this, SLOT(addButtonClicked()));
-
 }
 
 void AppletWidget::onButtonClicked(QAbstractButton *button)
