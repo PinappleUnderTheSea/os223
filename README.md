@@ -34,7 +34,7 @@ DDE 自启动管理插件可用于集中管理`Deepin`系统中软件开机自�
 
 插件图标：
 
-![图标](./images/图标.png)
+![图标](https://github.com/PinappleUnderTheSea/os223/blob/sy-dev/images/图标.png)
 
 自启动管理窗口：
 
