@@ -42,6 +42,7 @@ public:
 
 private:
     std::vector<QButtonGroup*> Btngroups;
+    std::vector<QButtonGroup*> Btns;
     QMap<QString, bool> selfSetUp;
     QMap<QString, QString> name_path;
     QString username;
