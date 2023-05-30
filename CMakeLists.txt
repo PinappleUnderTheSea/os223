@@ -14,11 +14,13 @@ project(${PLUGIN_NAME})
 set(CMAKE_AUTOMOC ON)
 # 启用 qrc 资源文件的支持
 set(CMAKE_AUTORCC ON)
+#打开全局uic
+set(CMAKE_AUTOUIC ON)
 
 # 指定所有源码文件
 # 使用了 cmake 的 file 命令，递归查找项目目录下所有头文件和源码文件，
 # 并将结果放入 SRCS 变量中，SRCS 变量可用于后续使用
-file(GLOB_RECURSE SRCS "*.h" "*.cpp")
+file(GLOB_RECURSE SRCS "*.h" "*.cpp" "*.ui")
 
 # 指定要用到的库
 # 使用了 cmake 的 find_package 命令，查找库 Qt5Widgets 等，
@@ -31,6 +33,7 @@ file(GLOB_RECURSE SRCS "*.h" "*.cpp")
 # <库名>_LIBRARIES      有哪些库文件（Qt5Widgets_LIBRARIES）
 find_package(Qt5Widgets REQUIRED)
 find_package(DtkWidget REQUIRED)
+
 
 # find_package 命令还可以用来加载 cmake 的功能模块
 # 并不是所有的库都直接支持 cmake 查找的，但大部分都支持了 pkg-config 这个标准，
@@ -65,6 +68,7 @@ add_definitions("${QT_DEFINITIONS} -DQT_PLUGIN")
 # SHARED 表示生成的库应该是动态库，
 # 变量 ${PLUGIN_NAME} 和 ${SRCS} 都是前面处理好的，
 # 另外 qrc 资源文件也应该追加在后面以编译进目标中。
+#qt5_wrap_ui(ui_FILES aboutdialog.ui)
 add_library(${PLUGIN_NAME} SHARED ${SRCS} self_startup.qrc)
 
 # 设置目标的生成位置，这里表示生成在执行 make 的目录,
