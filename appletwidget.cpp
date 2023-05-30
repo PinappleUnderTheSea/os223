@@ -178,7 +178,7 @@ void AppletWidget::onButtonClicked(QAbstractButton *button)
 void AppletWidget::addButtonClicked()
 {
     // add button
-    add();
+    Add();
     update_widget();
 }
 
@@ -186,8 +186,9 @@ void AppletWidget::delButtonClicked(QAbstractButton *button)
 {
     // now button
     qDebug() << button->property("index").toInt() << Qt::endl;
-    // functions         TODO
-    // delete(button->property("APP").toString());
+
+    // functions   
+    Delete(button->property("APP").toString());      //TODO
     update_widget();
     
 }
@@ -233,6 +234,7 @@ QString AppletWidget::getFileDir(QString path){
             break;
         }
     }
+    qDebug() << path.left(index+1);
     return path.left(index+1);
 }
 
@@ -264,10 +266,7 @@ QPair<QString, bool> AppletWidget::readfiles(QString filename){
 
 void AppletWidget::update(){
     qDebug()<<"update go";
-    QVector<QString> apps = searchAll();
-    for(int i=0; i<apps.size();i++){
-        selfSetUp[apps[i]] = false;
-    }
+    
     DIR *pDir;
     struct dirent* ptr;
     if(!(pDir = opendir((QString("/data/home/")+username+QString("/.config/autostart")).toStdString().c_str()))){
@@ -377,14 +376,17 @@ QString AppletWidget::disable(QString name){
 }
 
 QString AppletWidget::enable(QString name) {
+    qDebug() << "enable go"<<name;
     if(!name_path.contains(name)){
         qDebug() << QString("Invalid app name");
         return QString("Invalid app name");
     }
     QString path = name_path[name];
-    if(getFileDir(path).right(9) == "/.config/"){
+    qDebug() << path;
+    if(getFileDir(path).right(11) == "/autostart/"){
+        qDebug() << "111";
         QFile file(path);
-    //    qDebug() << path;
+        qDebug() << path;
         if (!file.open(QIODevice::ReadWrite | QIODevice::Text)){
             qDebug() << QString("can not change") ;
             return QString("can not change") ;
@@ -418,7 +420,7 @@ QString AppletWidget::enable(QString name) {
 }
 
 
-void AppletWidget::add(){
+QString AppletWidget::Add(){
     QFileDialog *fileDialog = new QFileDialog(this);
     fileDialog->setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::Files);
     fileDialog->setFileMode(QFileDialog::ExistingFile);
@@ -430,11 +432,11 @@ void AppletWidget::add(){
         qDebug() << "Path:" << selectDir;
         if(path.right(8) == ".desktop"){
             QPair<QString, bool> ans = readfiles(path);
-            name_path[ans.first] = path;
+            name_path[ans.first] = QString("/data/home/")+username+QString("/.config/autostart/") + ans.first + QString(".desktop");
             selfSetUp[ans.first] = false;
             
             QFile infile(path);
-            QFile outfile(QString("/data/home/") + username + QString("/.config/autostart/") + name + QString(".desktop"));
+            QFile outfile(QString("/data/home/")+username+QString("/.config/autostart/") + ans.first + QString(".desktop"));
 
             QTextStream in(&infile);
             if (!infile.open(QIODevice::ReadOnly | QIODevice::Text)){
@@ -461,14 +463,17 @@ void AppletWidget::add(){
             for(int i=0; i<contents.size();i++){
                 out << contents[i] << QString("\n");
             }
-            selfSetUp[name] = true;
+            selfSetUp[ans.first] = true;
             qDebug() << QString("Success");
         }else{
             QString ans = getFileName(path);
             name_path[ans] = path;
             selfSetUp[ans] = true;
             QFile outfile(QString("/data/home/")+username+QString("/.config/autostart/") + ans + QString(".desktop"));
-
+            if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text)){
+                qDebug() << QString("can not add") ;
+                return QString("can not add") ;
+            }
             QTextStream out(&outfile);
 
             out << "[Desktop Entry]\n";
@@ -479,11 +484,23 @@ void AppletWidget::add(){
             out << "Hidden=false"; 
 
         }
-        return;
+        return QString("Success");
     }
 }
 
+QString AppletWidget::Delete(QString name){
+    if(!name_path.contains(name)){
+        qDebug() << QString("Invalid app name");
+        return QString("Invalid app name");
+    }
 
+    QString path = name_path[name];
+    QFile f(path);
+    f.remove();
+    name_path.remove(name);
+    selfSetUp.remove(name);
+    update();
+}
 
 void AppletWidget::getAllFiles(QString path)
 {
