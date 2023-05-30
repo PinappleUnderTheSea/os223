@@ -50,19 +50,19 @@ AppletWidget::AppletWidget(QWidget *parent) :
 void AppletWidget::update_widget()
 {
     qDebug()<<"enter applet init"<<Qt::endl;
-    if(tableView != NULL)
+    if(tableView == NULL)
     {
-        delete(tableView);
+        tableView = new QTableView(this);
     }
-    if(tableModel != NULL)
+    if(tableModel == NULL)
     {
-        delete(tableModel);
+        tableModel = new QStandardItemModel(this);
     }
-    tableView = new QTableView(this);
+    
     tableView->setMinimumSize(550,700);
     tableView->verticalHeader()->hide(); // hide row number
 
-    tableModel = new QStandardItemModel(this);
+    
     tableView->setModel(tableModel);// recommend to set model before detail settings
 
     //set columns
@@ -119,8 +119,7 @@ void AppletWidget::update_widget()
         // add button to the last column
         QRadioButton *button0 = new QRadioButton();
         QRadioButton *button1 = new QRadioButton();
-        QRadioButton *btn_del = new QRadioButton();
-        btn_del->setChecked(0);
+        QPushButton *btn_del = new QPushButton("-");
 
         m_pButtonGroup->addButton(button0,0);
         m_pButtonGroup->addButton(button1,1);
