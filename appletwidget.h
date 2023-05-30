@@ -14,6 +14,7 @@
 #include <QApplication>
 #include <QStandardItemModel>
 #include <QTableView>
+#include <QPushButton>
 
 using namespace std;
 
@@ -35,7 +36,7 @@ public:
     void getAllFiles(QString);
     void globalSearch();
     QString Add();
-    QString Delete(QString name);
+    void Delete(QString name);
     void showApps();
     void showPaths();
     void update_widget();
@@ -46,8 +47,8 @@ private:
     QMap<QString, bool> selfSetUp;
     QMap<QString, QString> name_path;
     QString username;
-    QTableView *tableView = NULL;
-    QStandardItemModel *tableModel = NULL;
+    QTableView *tableView ;
+    QStandardItemModel *tableModel;
 protected slots:
     void onButtonClicked(QAbstractButton *button);
     void addButtonClicked();
