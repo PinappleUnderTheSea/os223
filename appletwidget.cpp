@@ -52,22 +52,22 @@ AppletWidget::AppletWidget(QWidget *parent) :
 void AppletWidget::update_widget()
 {
     qDebug()<<"enter applet init"<<Qt::endl;
-    if(tableView == NULL)
+    if(tableView != NULL)
     {
-        // delete(tableView);
-        tableView = new QTableView(this);
+        delete(tableView);
+        // tableView = new QTableView(this);
     }
-    if(tableModel == NULL)
+    if(tableModel != NULL)
     {
-        // delete(tableModel);
-        tableModel = new QStandardItemModel(this);
+        delete(tableModel);
+        // tableModel = new QStandardItemModel(this);
     }
 
-    // tableView = new QTableView(this);
+    tableView = new QTableView(this);
     tableView->setMinimumSize(550,700);
     tableView->verticalHeader()->hide(); // hide row number
 
-    // tableModel = new QStandardItemModel(this);
+    tableModel = new QStandardItemModel(this);
     tableView->setModel(tableModel);// recommend to set model before detail settings
 
     //set columns
@@ -102,8 +102,8 @@ void AppletWidget::update_widget()
         {
             Btngroups.push_back(m_pButtonGroup);
         }else{
-            if(Btngroups[i] != NULL)
-                delete(Btngroups[i]);
+            // if(Btngroups[i] != NULL)
+            //     delete(Btngroups[i]);
             Btngroups[i] = m_pButtonGroup;
         }
 
@@ -111,8 +111,8 @@ void AppletWidget::update_widget()
         {
             Btns.push_back(m_btns);
         }else{
-            if(Btns[i] != NULL)
-                delete(Btns[i]);
+            // if(Btns[i] != NULL)
+            //     delete(Btns[i]);
             Btns[i] = m_btns;
         }
         //set table content
@@ -136,6 +136,7 @@ void AppletWidget::update_widget()
         button0->setProperty("APP", it.key()); //to_do
         button1->setProperty("APP",it.key()); //to_do
         btn_del->setProperty("APP",it.key());
+        btn_del->setProperty("index",i);
 
         //set the init button status
         if(it.value()) //to_do
@@ -157,11 +158,6 @@ void AppletWidget::update_widget()
 
         i++;
     }
-
-    tableModel->setItem(i, 0, new QStandardItem());// to_do
-    tableModel->setItem(i, 1, new QStandardItem());
-    tableModel->setItem(i, 2, new QStandardItem());
-    tableModel->setItem(i, 3, new QStandardItem());
     qDebug()<<"applet6";
 
     //add + button
@@ -210,7 +206,9 @@ void AppletWidget::delButtonClicked(QAbstractButton *button)
     // functions   
     Delete(button->property("APP").toString());      //TODO
     qDebug() << QString("here1");
-    update_widget();
+
+    tableModel->setItem(button->property("index").toInt(), 0, new QStandardItem());
+
     qDebug() << QString("here2");
 }
 
