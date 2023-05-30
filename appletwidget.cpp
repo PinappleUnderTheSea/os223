@@ -10,7 +10,7 @@
 #include <sys/stat.h>
 #include <fstream>
 #include <qfiledialog.h>
-#include<QPushButton>
+
 
 QString getName(){
 
@@ -41,6 +41,8 @@ AppletWidget::AppletWidget(QWidget *parent) :
     qDebug()<<"enter applet init"<<Qt::endl;
     setFixedSize(500,700);
     QString uname = getName();
+    tableView = NULL;
+    tableModel = NULL;
 
     username = uname;
     // add tableview
@@ -53,30 +55,36 @@ void AppletWidget::update_widget()
     if(tableView != NULL)
     {
         delete(tableView);
+        // tableView = new QTableView(this);
     }
     if(tableModel != NULL)
     {
         delete(tableModel);
+        // tableModel = new QStandardItemModel(this);
     }
+
     tableView = new QTableView(this);
-    tableView->setMinimumSize(500,700);
+    tableView->setMinimumSize(550,700);
     tableView->verticalHeader()->hide(); // hide row number
 
     tableModel = new QStandardItemModel(this);
     tableView->setModel(tableModel);// recommend to set model before detail settings
 
     //set columns
-    tableModel->setColumnCount(3);
+    tableModel->setColumnCount(4);
+    
     //name of colums
     tableModel->setHeaderData(0, Qt::Horizontal, QString::fromLocal8Bit("Application"));
     tableModel->setHeaderData(1, Qt::Horizontal, QString::fromLocal8Bit("self-startup"));
     tableModel->setHeaderData(2, Qt::Horizontal, QString::fromLocal8Bit("no self-startup"));
-
+    tableModel->setHeaderData(3, Qt::Horizontal, QString::fromLocal8Bit("-"));
+    
     //colum width
     //tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    tableView->setColumnWidth(0,280);
+    tableView->setColumnWidth(0,220);
     tableView->setColumnWidth(1,110);
     tableView->setColumnWidth(2,110);
+    tableView->setColumnWidth(3,60);
 
     //update table
     update();
@@ -87,36 +95,48 @@ void AppletWidget::update_widget()
     for(auto it = selfSetUp.begin();it != selfSetUp.end(); it++) //to_do
     {
         // add button group
-        qDebug()<<"applet1--";
-
-        QButtonGroup * m_pButtonGroup = new QButtonGroup(this);
+        QButtonGroup * m_pButtonGroup = new QButtonGroup();
+        QButtonGroup * m_btns = new QButtonGroup();
 
         if(i >= Btngroups.size())
         {
             Btngroups.push_back(m_pButtonGroup);
         }else{
-            if(Btngroups[i] != NULL)
-                delete(Btngroups[i]);
+            // if(Btngroups[i] != NULL)
+            //     delete(Btngroups[i]);
             Btngroups[i] = m_pButtonGroup;
         }
-        qDebug()<<"applet2";
+
+        if(i >= Btns.size())
+        {
+            Btns.push_back(m_btns);
+        }else{
+            // if(Btns[i] != NULL)
+            //     delete(Btns[i]);
+            Btns[i] = m_btns;
+        }
         //set table content
         tableModel->setItem(i, 0, new QStandardItem(it.key()));// to_do
         tableModel->setItem(i, 1, new QStandardItem());
         tableModel->setItem(i, 2, new QStandardItem());
-        qDebug()<<"applet3";
+        tableModel->setItem(i, 3, new QStandardItem());
+
         // add button to the last column
         QRadioButton *button0 = new QRadioButton();
         QRadioButton *button1 = new QRadioButton();
+        QPushButton *btn_del = new QPushButton("-");
 
         m_pButtonGroup->addButton(button0,0);
         m_pButtonGroup->addButton(button1,1);
-        qDebug()<<"applet4";
+        m_btns->addButton(btn_del,0);
+
         //set button property
         button0->setProperty("index", 2*i);
         button1->setProperty("index", 2*i + 1);
         button0->setProperty("APP", it.key()); //to_do
         button1->setProperty("APP",it.key()); //to_do
+        btn_del->setProperty("APP",it.key());
+        btn_del->setProperty("index",i);
 
         //set the init button status
         if(it.value()) //to_do
@@ -130,24 +150,21 @@ void AppletWidget::update_widget()
         qDebug()<<"applet5";
         // set click event
         connect(Btngroups[i], SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
-
+        connect(Btns[i], SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(delButtonClicked(QAbstractButton*)));
         // insert the buttons
         tableView->setIndexWidget(tableModel->index(tableModel->rowCount()-1,1),button0);
         tableView->setIndexWidget(tableModel->index(tableModel->rowCount()-1,2),button1);
+        tableView->setIndexWidget(tableModel->index(tableModel->rowCount()-1,3),btn_del);
+
         i++;
     }
     qDebug()<<"applet6";
 
-    //add + - button
+    //add + button
     QPushButton * btn_add = new QPushButton("+", this);
     btn_add->resize(30,30);
-    QPushButton * btn_del = new QPushButton("-", this);
-    btn_del->resize(30,30);
-    btn_del->move(30,0);
 
     connect(btn_add, SIGNAL(clicked()), this, SLOT(addButtonClicked()));
-    connect(btn_del, SIGNAL(clicked()), this, SLOT(delButtonClicked(QAbstractButton*)));
-
 }
 
 void AppletWidget::onButtonClicked(QAbstractButton *button)
@@ -177,18 +194,22 @@ void AppletWidget::onButtonClicked(QAbstractButton *button)
 void AppletWidget::addButtonClicked()
 {
     // add button
-    Manual();
+    qDebug() << Add() << Qt::endl;
     update_widget();
 }
 
 void AppletWidget::delButtonClicked(QAbstractButton *button)
 {
     // now button
-    qDebug() << button->property("index").toInt() << Qt::endl;
+    qDebug() << button->property("APP").toString() << Qt::endl;
 
-    // functions         TODO
-    update_widget();
-    
+    // functions   
+    Delete(button->property("APP").toString());      //TODO
+    qDebug() << QString("here1");
+
+    tableModel->setItem(button->property("index").toInt(), 0, new QStandardItem());
+
+    qDebug() << QString("here2");
 }
 
 AppletWidget::~AppletWidget()
@@ -232,6 +253,7 @@ QString AppletWidget::getFileDir(QString path){
             break;
         }
     }
+    qDebug() << path.left(index+1);
     return path.left(index+1);
 }
 
@@ -263,10 +285,7 @@ QPair<QString, bool> AppletWidget::readfiles(QString filename){
 
 void AppletWidget::update(){
     qDebug()<<"update go";
-    QVector<QString> apps = searchAll();
-    for(int i=0; i<apps.size();i++){
-        selfSetUp[apps[i]] = false;
-    }
+    
     DIR *pDir;
     struct dirent* ptr;
     if(!(pDir = opendir((QString("/data/home/")+username+QString("/.config/autostart")).toStdString().c_str()))){
@@ -376,14 +395,17 @@ QString AppletWidget::disable(QString name){
 }
 
 QString AppletWidget::enable(QString name) {
+    qDebug() << "enable go"<<name;
     if(!name_path.contains(name)){
         qDebug() << QString("Invalid app name");
         return QString("Invalid app name");
     }
     QString path = name_path[name];
-    if(getFileDir(path).right(9) == "/.config/"){
+    qDebug() << path;
+    if(getFileDir(path).right(11) == "/autostart/"){
+        qDebug() << "111";
         QFile file(path);
-    //    qDebug() << path;
+        qDebug() << path;
         if (!file.open(QIODevice::ReadWrite | QIODevice::Text)){
             qDebug() << QString("can not change") ;
             return QString("can not change") ;
@@ -417,7 +439,7 @@ QString AppletWidget::enable(QString name) {
 }
 
 
-void AppletWidget::add(){
+QString AppletWidget::Add(){
     QFileDialog *fileDialog = new QFileDialog(this);
     fileDialog->setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::Files);
     fileDialog->setFileMode(QFileDialog::ExistingFile);
@@ -429,11 +451,11 @@ void AppletWidget::add(){
         qDebug() << "Path:" << selectDir;
         if(path.right(8) == ".desktop"){
             QPair<QString, bool> ans = readfiles(path);
-            name_path[ans.first] = path;
+            name_path[ans.first] = QString("/data/home/")+username+QString("/.config/autostart/") + ans.first + QString(".desktop");
             selfSetUp[ans.first] = false;
             
             QFile infile(path);
-            QFile outfile(QString("/data/home/")+username+QString("/.config/autostart/") + name + QString(".desktop"));
+            QFile outfile(QString("/data/home/")+username+QString("/.config/autostart/") + ans.first + QString(".desktop"));
 
             QTextStream in(&infile);
             if (!infile.open(QIODevice::ReadOnly | QIODevice::Text)){
@@ -460,14 +482,17 @@ void AppletWidget::add(){
             for(int i=0; i<contents.size();i++){
                 out << contents[i] << QString("\n");
             }
-            selfSetUp[name] = true;
+            selfSetUp[ans.first] = true;
             qDebug() << QString("Success");
         }else{
             QString ans = getFileName(path);
             name_path[ans] = path;
             selfSetUp[ans] = true;
             QFile outfile(QString("/data/home/")+username+QString("/.config/autostart/") + ans + QString(".desktop"));
-
+            if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text)){
+                qDebug() << QString("can not add") ;
+                return QString("can not add") ;
+            }
             QTextStream out(&outfile);
 
             out << "[Desktop Entry]\n";
@@ -478,11 +503,23 @@ void AppletWidget::add(){
             out << "Hidden=false"; 
 
         }
-        return;
+        return QString("Success");
     }
 }
 
+void AppletWidget::Delete(QString name){
+    if(!name_path.contains(name)){
+        qDebug() << QString("Invalid app name");
+        return ;
+    }
 
+    QString path = name_path[name];
+    QFile f(path);
+    f.remove();
+    name_path.remove(name);
+    selfSetUp.remove(name);
+    update();
+}
 
 void AppletWidget::getAllFiles(QString path)
 {
