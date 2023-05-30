@@ -58,6 +58,7 @@ void AppletWidget::update_widget()
     {
         delete(tableModel);
     }
+    
     tableView = new QTableView(this);
     tableView->setMinimumSize(500,700);
     tableView->verticalHeader()->hide(); // hide row number
@@ -189,7 +190,7 @@ void AppletWidget::delButtonClicked()
 
     // functions   
     Delete(choosen_name);      //TODO
-    update_widget();
+    // update_widget();
     
 }
 
