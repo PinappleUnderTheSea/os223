@@ -34,7 +34,8 @@ public:
     QString getFileDir(QString);
     void getAllFiles(QString);
     void globalSearch();
-    void add();
+    QString Add();
+    QString Delete(QString name);
     void showApps();
     void showPaths();
     void update_widget();
