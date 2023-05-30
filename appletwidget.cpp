@@ -138,6 +138,8 @@ void AppletWidget::update_widget()
         // insert the buttons
         tableView->setIndexWidget(tableModel->index(tableModel->rowCount()-1,1),button0);
         tableView->setIndexWidget(tableModel->index(tableModel->rowCount()-1,2),button1);
+        tableView->setIndexWidget(tableModel->index(tableModel->rowCount()-1,3),btn_del);
+
         i++;
     }
     qDebug()<<"applet6";
