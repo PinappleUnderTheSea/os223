@@ -59,7 +59,7 @@ void AppletWidget::update_widget()
         delete(tableModel);
     }
     tableView = new QTableView(this);
-    tableView->setMinimumSize(500,700);
+    tableView->setMinimumSize(550,700);
     tableView->verticalHeader()->hide(); // hide row number
 
     tableModel = new QStandardItemModel(this);
@@ -76,10 +76,10 @@ void AppletWidget::update_widget()
     
     //colum width
     //tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    tableView->setColumnWidth(0,280);
+    tableView->setColumnWidth(0,220);
     tableView->setColumnWidth(1,110);
     tableView->setColumnWidth(2,110);
-    tableView->setColumnWidth(3,30);
+    tableView->setColumnWidth(3,60);
 
     //update table
     update();
@@ -91,6 +91,7 @@ void AppletWidget::update_widget()
     {
         // add button group
         QButtonGroup * m_pButtonGroup = new QButtonGroup(this);
+        QButtonGroup * m_btns = new QButtonGroup(this);
 
         if(i >= Btngroups.size())
         {
@@ -99,6 +100,15 @@ void AppletWidget::update_widget()
             if(Btngroups[i] != NULL)
                 delete(Btngroups[i]);
             Btngroups[i] = m_pButtonGroup;
+        }
+
+        if(i >= Btns.size())
+        {
+            Btns.push_back(m_btns);
+        }else{
+            if(Btns[i] != NULL)
+                delete(Btns[i]);
+            Btns[i] = m_btns;
         }
         //set table content
         tableModel->setItem(i, 0, new QStandardItem(it.key()));// to_do
@@ -109,11 +119,12 @@ void AppletWidget::update_widget()
         // add button to the last column
         QRadioButton *button0 = new QRadioButton();
         QRadioButton *button1 = new QRadioButton();
-        QPushButton *btn_del = new QPushButton("-", this);
-        btn_del->resize(30,30);
+        QRadioButton *btn_del = new QRadioButton();
+        btn_del->setChecked(0);
 
         m_pButtonGroup->addButton(button0,0);
         m_pButtonGroup->addButton(button1,1);
+        m_btns->addButton(btn_del,0);
 
         //set button property
         button0->setProperty("index", 2*i);
@@ -134,7 +145,7 @@ void AppletWidget::update_widget()
         qDebug()<<"applet5";
         // set click event
         connect(Btngroups[i], SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
-        connect(btn_del, SIGNAL(clicked()), this, SLOT(delButtonClicked(QAbstractButton*)));
+        connect(Btns[i], SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(delButtonClicked(QAbstractButton*)));
         // insert the buttons
         tableView->setIndexWidget(tableModel->index(tableModel->rowCount()-1,1),button0);
         tableView->setIndexWidget(tableModel->index(tableModel->rowCount()-1,2),button1);
@@ -178,18 +189,18 @@ void AppletWidget::onButtonClicked(QAbstractButton *button)
 void AppletWidget::addButtonClicked()
 {
     // add button
-    Add();
+    qDebug() << Add() << Qt::endl;
     update_widget();
 }
 
 void AppletWidget::delButtonClicked(QAbstractButton *button)
 {
     // now button
-    qDebug() << button->property("index").toInt() << Qt::endl;
+    qDebug() << button->property("APP").toString() << Qt::endl;
 
     // functions   
     Delete(button->property("APP").toString());      //TODO
-    update_widget();
+    // update_widget();
     
 }
 
