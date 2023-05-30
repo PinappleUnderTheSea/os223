@@ -441,7 +441,7 @@ QString AppletWidget::Add(){
             QTextStream in(&infile);
             if (!infile.open(QIODevice::ReadOnly | QIODevice::Text)){
                 qDebug() << QString("can not change") ;
-                return; //QString("can not change") ;--zyy
+                return QString("can not change") ;
             }
             QVector<QString> contents;
             int count =0;
@@ -457,7 +457,7 @@ QString AppletWidget::Add(){
 
             if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text)){
                 qDebug() << QString("can not change") ;
-                return ;//QString("can not change") ;--zyy
+                return QString("can not change") ;
             }
             QTextStream out(&outfile);
             for(int i=0; i<contents.size();i++){
