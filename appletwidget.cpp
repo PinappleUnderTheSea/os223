@@ -111,7 +111,7 @@ void AppletWidget::update_widget()
 
         m_pButtonGroup->addButton(button0,0);
         m_pButtonGroup->addButton(button1,1);
-        qDebug()<<"applet4";
+
         //set button property
         button0->setProperty("index", 2*i);
         button1->setProperty("index", 2*i + 1);
@@ -130,7 +130,6 @@ void AppletWidget::update_widget()
         qDebug()<<"applet5";
         // set click event
         connect(Btngroups[i], SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
-
         // insert the buttons
         tableView->setIndexWidget(tableModel->index(tableModel->rowCount()-1,1),button0);
         tableView->setIndexWidget(tableModel->index(tableModel->rowCount()-1,2),button1);
@@ -154,6 +153,7 @@ void AppletWidget::onButtonClicked(QAbstractButton *button)
 {
     // now button
     qDebug() << button->property("index").toInt() << Qt::endl;
+    choosen_name = button->property("APP").toString();
 
     // functions         to_do
      if(button->property("index").toInt() % 2 == 0)

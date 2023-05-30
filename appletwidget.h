@@ -46,6 +46,7 @@ private:
     QString username;
     QTableView *tableView = NULL;
     QStandardItemModel *tableModel = NULL;
+    QString choosen_name;
 protected slots:
     void onButtonClicked(QAbstractButton *button);
     void addButtonClicked();
