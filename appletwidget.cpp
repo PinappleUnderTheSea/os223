@@ -225,6 +225,16 @@ QString AppletWidget::getFileName(QString path){
     return path.right(path.length()-index-1);
 }
 
+QString AppletWidget::getFileDir(QString path){
+    int index;
+    for(index = path.length()-1;index>=0;index--){
+        if(path[index]=="/"){
+            break;
+        }
+    }
+    return path.left(index+1);
+}
+
 QPair<QString, bool> AppletWidget::readfiles(QString filename){
 //    qDebug() << filename;
     QFile file(filename);
@@ -371,7 +381,7 @@ QString AppletWidget::enable(QString name) {
         return QString("Invalid app name");
     }
     QString path = name_path[name];
-    if(path.left(5) == "/data"){
+    if(getFileDir(path).right(9) == "/.config/"){
         QFile file(path);
     //    qDebug() << path;
         if (!file.open(QIODevice::ReadWrite | QIODevice::Text)){
@@ -404,40 +414,74 @@ QString AppletWidget::enable(QString name) {
         qDebug() << QString("Success");
         return QString("Success");
     }
-
-    QFile infile(path);
-    QFile outfile(QString("/data/home/")+username+QString("/.config/autostart/") + name + QString(".desktop"));
-
-    QTextStream in(&infile);
-    if (!infile.open(QIODevice::ReadOnly | QIODevice::Text)){
-        qDebug() << QString("can not change") ;
-        return QString("can not change") ;
-    }
-    QVector<QString> contents;
-    int count =0;
-    QString line;
-    while(!in.atEnd()){
-        line = in.readLine();
-        if(count == 1){
-            contents.push_back(QString("Hidden=false"));
-        }
-        contents.push_back(line);
-        count ++;
-    }
-
-    if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text)){
-        qDebug() << QString("can not change") ;
-        return QString("can not change") ;
-    }
-    QTextStream out(&outfile);
-    for(int i=0; i<contents.size();i++){
-        out << contents[i] << QString("\n");
-    }
-    selfSetUp[name] = true;
-    qDebug() << QString("Success");
-    return QString("Success");
-
 }
+
+
+void AppletWidget::add(){
+    QFileDialog *fileDialog = new QFileDialog(this);
+    fileDialog->setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::Files);
+    fileDialog->setFileMode(QFileDialog::ExistingFile);
+    fileDialog->exec();
+    auto selectDir = fileDialog->selectedFiles();
+    if (selectDir.size()>0)
+    {
+        QString path = selectDir.at(0);
+        qDebug() << "Path:" << selectDir;
+        if(path.right(8) == ".desktop"){
+            QPair<QString, bool> ans = readfiles(path);
+            name_path[ans.first] = path;
+            selfSetUp[ans.first] = false;
+            
+            QFile infile(path);
+            QFile outfile(QString("/data/home/")+username+QString("/.config/autostart/") + name + QString(".desktop"));
+
+            QTextStream in(&infile);
+            if (!infile.open(QIODevice::ReadOnly | QIODevice::Text)){
+                qDebug() << QString("can not change") ;
+                return QString("can not change") ;
+            }
+            QVector<QString> contents;
+            int count =0;
+            QString line;
+            while(!in.atEnd()){
+                line = in.readLine();
+                if(count == 1){
+                    contents.push_back(QString("Hidden=false"));
+                }
+                contents.push_back(line);
+                count ++;
+            }
+
+            if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text)){
+                qDebug() << QString("can not change") ;
+                return QString("can not change") ;
+            }
+            QTextStream out(&outfile);
+            for(int i=0; i<contents.size();i++){
+                out << contents[i] << QString("\n");
+            }
+            selfSetUp[name] = true;
+            qDebug() << QString("Success");
+        }else{
+            QString ans = getFileName(path);
+            name_path[ans] = path;
+            selfSetUp[ans] = true;
+            QFile outfile(QString("/data/home/")+username+QString("/.config/autostart/") + ans + QString(".desktop"));
+
+            QTextStream out(&outfile);
+
+            out << "[Desktop Entry]\n";
+            out << "Name="<<ans <<"\n";
+            out << "Exec=" << path << "\n";
+            out << "Terminal=false\n";
+            out << "Type=Application\n";
+            out << "Hidden=false"; 
+
+        }
+        return;
+    }
+}
+
 
 
 void AppletWidget::getAllFiles(QString path)
@@ -473,27 +517,4 @@ void AppletWidget::getAllFiles(QString path)
 
 void AppletWidget::globalSearch(){
     getAllFiles(QString("/"));
-}
-
-void AppletWidget::Manual(){
-    QFileDialog *fileDialog = new QFileDialog(this);
-    fileDialog->setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::Files);
-    fileDialog->setFileMode(QFileDialog::ExistingFile);
-    fileDialog->exec();
-    auto selectDir = fileDialog->selectedFiles();
-    if (selectDir.size()>0)
-    {
-        QString path = selectDir.at(0);
-        qDebug() << "Path:" << selectDir;
-        if(path.right(8) == ".desktop"){
-            QPair<QString, bool> ans = readfiles(path);
-            name_path[ans.first] = path;
-            selfSetUp[ans.first] = false;
-        }else{
-            QString ans = getFileName(path);
-            name_path[ans] = path;
-        }
-        return;
-    }
-    qDebug() << "Not Executable";
 }

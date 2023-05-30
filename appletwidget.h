@@ -31,9 +31,10 @@ public:
     QString disable(QString);
     QString enable(QString);
     QString getFileName(QString);
+    QString getFileDir(QString);
     void getAllFiles(QString);
     void globalSearch();
-    void Manual();
+    void add();
     void showApps();
     void showPaths();
     void update_widget();
