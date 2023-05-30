@@ -105,6 +105,7 @@ sh install.sh
 ├── self_startup.qrc&emsp;&emsp;&emsp;&emsp;&emsp;#用于展示插件图片 \
 ├── selfstartupplugin.cpp&emsp;&emsp;&emsp;#部件类的实现文件 \
 ├── selfstartupplugin.h&emsp;&emsp;&emsp;&emsp;#部件类的头文件 \
+├── uninstall.sh&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;#插件卸载脚本 \
 ├── 初赛报告.md \
 └── 过程文档.md 
 ## 分工
