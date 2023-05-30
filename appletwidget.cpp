@@ -66,17 +66,20 @@ void AppletWidget::update_widget()
     tableView->setModel(tableModel);// recommend to set model before detail settings
 
     //set columns
-    tableModel->setColumnCount(3);
+    tableModel->setColumnCount(4);
+    
     //name of colums
     tableModel->setHeaderData(0, Qt::Horizontal, QString::fromLocal8Bit("Application"));
     tableModel->setHeaderData(1, Qt::Horizontal, QString::fromLocal8Bit("self-startup"));
     tableModel->setHeaderData(2, Qt::Horizontal, QString::fromLocal8Bit("no self-startup"));
-
+    tableModel->setHeaderData(3, Qt::Horizontal, QString::fromLocal8Bit("-"));
+    
     //colum width
     //tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     tableView->setColumnWidth(0,280);
     tableView->setColumnWidth(1,110);
     tableView->setColumnWidth(2,110);
+    tableView->setColumnWidth(3,30);
 
     //update table
     update();
@@ -87,8 +90,6 @@ void AppletWidget::update_widget()
     for(auto it = selfSetUp.begin();it != selfSetUp.end(); it++) //to_do
     {
         // add button group
-        qDebug()<<"applet1--";
-
         QButtonGroup * m_pButtonGroup = new QButtonGroup(this);
 
         if(i >= Btngroups.size())
@@ -99,15 +100,17 @@ void AppletWidget::update_widget()
                 delete(Btngroups[i]);
             Btngroups[i] = m_pButtonGroup;
         }
-        qDebug()<<"applet2";
         //set table content
         tableModel->setItem(i, 0, new QStandardItem(it.key()));// to_do
         tableModel->setItem(i, 1, new QStandardItem());
         tableModel->setItem(i, 2, new QStandardItem());
-        qDebug()<<"applet3";
+        tableModel->setItem(i, 3, new QStandardItem());
+
         // add button to the last column
         QRadioButton *button0 = new QRadioButton();
         QRadioButton *button1 = new QRadioButton();
+        QPushButton *btn_del = new QPushButton("-", this);
+        btn_del->resize(30,30);
 
         m_pButtonGroup->addButton(button0,0);
         m_pButtonGroup->addButton(button1,1);
@@ -117,6 +120,7 @@ void AppletWidget::update_widget()
         button1->setProperty("index", 2*i + 1);
         button0->setProperty("APP", it.key()); //to_do
         button1->setProperty("APP",it.key()); //to_do
+        btn_del->setProperty("APP",it.key());
 
         //set the init button status
         if(it.value()) //to_do
@@ -130,6 +134,7 @@ void AppletWidget::update_widget()
         qDebug()<<"applet5";
         // set click event
         connect(Btngroups[i], SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
+        connect(btn_del, SIGNAL(clicked()), this, SLOT(delButtonClicked(QAbstractButton*)));
         // insert the buttons
         tableView->setIndexWidget(tableModel->index(tableModel->rowCount()-1,1),button0);
         tableView->setIndexWidget(tableModel->index(tableModel->rowCount()-1,2),button1);
@@ -140,12 +145,9 @@ void AppletWidget::update_widget()
     //add + - button
     QPushButton * btn_add = new QPushButton("+", this);
     btn_add->resize(30,30);
-    QPushButton * btn_del = new QPushButton("-", this);
-    btn_del->resize(30,30);
-    btn_del->move(30,0);
+    
 
     connect(btn_add, SIGNAL(clicked()), this, SLOT(addButtonClicked()));
-    connect(btn_del, SIGNAL(clicked()), this, SLOT(delButtonClicked(QAbstractButton*)));
 
 }
 
@@ -153,7 +155,6 @@ void AppletWidget::onButtonClicked(QAbstractButton *button)
 {
     // now button
     qDebug() << button->property("index").toInt() << Qt::endl;
-    choosen_name = button->property("APP").toString();
 
     // functions         to_do
      if(button->property("index").toInt() % 2 == 0)
@@ -177,7 +178,7 @@ void AppletWidget::onButtonClicked(QAbstractButton *button)
 void AppletWidget::addButtonClicked()
 {
     // add button
-    Manual();
+    add();
     update_widget();
 }
 
@@ -185,8 +186,8 @@ void AppletWidget::delButtonClicked(QAbstractButton *button)
 {
     // now button
     qDebug() << button->property("index").toInt() << Qt::endl;
-
     // functions         TODO
+    // delete(button->property("APP").toString());
     update_widget();
     
 }
@@ -433,12 +434,12 @@ void AppletWidget::add(){
             selfSetUp[ans.first] = false;
             
             QFile infile(path);
-            QFile outfile(QString("/data/home/")+username+QString("/.config/autostart/") + name + QString(".desktop"));
+            QFile outfile(QString("/data/home/") + username + QString("/.config/autostart/") + name + QString(".desktop"));
 
             QTextStream in(&infile);
             if (!infile.open(QIODevice::ReadOnly | QIODevice::Text)){
                 qDebug() << QString("can not change") ;
-                return QString("can not change") ;
+                return; //QString("can not change") ;--zyy
             }
             QVector<QString> contents;
             int count =0;
@@ -454,7 +455,7 @@ void AppletWidget::add(){
 
             if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text)){
                 qDebug() << QString("can not change") ;
-                return QString("can not change") ;
+                return ;//QString("can not change") ;--zyy
             }
             QTextStream out(&outfile);
             for(int i=0; i<contents.size();i++){
