@@ -52,22 +52,22 @@ AppletWidget::AppletWidget(QWidget *parent) :
 void AppletWidget::update_widget()
 {
     qDebug()<<"enter applet init"<<Qt::endl;
-    if(tableView != NULL)
+    if(tableView == NULL)
     {
-        delete(tableView);
-        // tableView = new QTableView(this);
+        // delete(tableView);
+        tableView = new QTableView(this);
     }
-    if(tableModel != NULL)
+    if(tableModel == NULL)
     {
-        delete(tableModel);
-        // tableModel = new QStandardItemModel(this);
+        // delete(tableModel);
+        tableModel = new QStandardItemModel(this);
     }
 
-    tableView = new QTableView(this);
+    // tableView = new QTableView(this);
     tableView->setMinimumSize(550,700);
     tableView->verticalHeader()->hide(); // hide row number
 
-    tableModel = new QStandardItemModel(this);
+    // tableModel = new QStandardItemModel(this);
     tableView->setModel(tableModel);// recommend to set model before detail settings
 
     //set columns
