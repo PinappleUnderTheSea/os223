@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "*.ui": "cpp",
+        "memory": "cpp",
+        "xhash": "cpp",
+        "xlocnum": "cpp",
+        "vector": "cpp",
+        "array": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "utility": "cpp"
+    }
+}

@@ -2,27 +2,32 @@
 #define SELFSTARTUPPLUGIN_H
 
 #include <dde-dock/pluginsiteminterface.h>
-#include <vector>
-#include <unordered_map>
+#include <dde-dock/pluginproxyinterface.h>
+
 #include <QObject>
+#include <QLabel>
+#include <QFile>
+#include <cstdio>
+#include <QDebug>
 
-#include "informationwidget.h"
+#include "appletwidget.h"
+#include "mainwidget.h"
+#include "aboutdialog.h"
 
-using namespace std;
-class SelfStarupPlugin : public QObject, PluginsItemInterface
+class SelfStartupPlugin : public QObject, PluginsItemInterface
 {
 private:
     MainWidget *m_pluginWidget;
+    AppletWidget *m_appletWidget; 
 
     Q_OBJECT
     // 声明实现了的接口
     Q_INTERFACES(PluginsItemInterface)
     // 插件元数据
     Q_PLUGIN_METADATA(IID "com.deepin.dock.PluginsItemInterface" FILE "self_startup.json")
-    unordered_map<string, bool> selfSetUp;
 
 public:
-    explicit SelfStarupPlugin(QObject *parent = nullptr);
+    explicit SelfStartupPlugin(QObject *parent = nullptr);
 
     // 返回插件的名称，必须是唯一值，不可以和其它插件冲突
     const QString pluginName() const override;
@@ -33,19 +38,24 @@ public:
 
     // 返回插件的 widget
     QWidget *itemWidget(const QString &itemKey) override;
-    PluginMode status() const override;
-    QString description() const override;
+    // PluginMode status() const override;
+    // QString description() const override;
 
-    QIcon icon(const DockPart &dockPart, int themeType) override;
-    PluginFlags flags() const override;
+    //弹窗
+    QWidget *itemPopupApplet(const QString &itemKey) override;
 
-    vector<string> searchAll();
-    void update();
-    bool readfiles(string);
+    // QIcon icon(const DockPart &dockPart, int themeType) override;
+    // PluginFlags flags() const override;
+    // void writeConfig(Settings *settings);
 
     bool pluginIsAllowDisable() override;
     bool pluginIsDisable() override;
     void pluginStateSwitched() override;
+
+    // void about();
+
+    const QString itemContextMenu(const QString &itemKey) override; //TODO
+    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;   //TODO
 };
 
 #endif // SELFSTARTUPPLUGIN_H
