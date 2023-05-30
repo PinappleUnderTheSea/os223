@@ -76,25 +76,37 @@ sh install.sh
 出现`成果展示`章节的图标，即为安装成功。
 
 ## 提交仓库目录和文件描述
-
-├── CMakeLists.txt                                          \
-├── README.md                                               \
-├── aboutdialog.cpp						#关于窗口的实现文件     \
-├── aboutdialog.h							#关于窗口的头文件   \
-├── aboutdialog.ui							#关于窗口的UI文件   \
-├── appletwidget.cpp					  #自启动管理窗口的实现文件 \
-├── appletwidget.h						  #自启动管理窗口的头文件   \
-├── install.sh									#插件安装脚本   \
-├── main_aboutdialog_test.cpp	  #关于窗口的测试文件              \
-├── main_test.cpp							#测试文件   \
-├── mainwidget.cpp						 #插件类的实现文件  \
-├── mainwidget.h							 #插件类的头文件    \
-├── self_startup.json						#插件的元数据文件，指明了当前插件所使用的 dde-dock 的接口版本   \
-├── self_startup.pro						 #辅助 cmake 的配置文件 \
-├── self_startup.qrc						 #用于展示插件图片  \
-├── selfstartupplugin.cpp				#部件类的实现文件   \
-├── selfstartupplugin.h					#部件类的头文件
-
+. \
+├── CMakeLists.txt \
+├── README.md \
+├── aboutdialog.cpp&emsp;&emsp;&emsp;&ensp;#关于窗口的实现文件 \
+├── aboutdialog.h&emsp;&emsp;&emsp;&emsp;&ensp;#关于窗口的头文件 \
+├── aboutdialog.ui&emsp;&emsp;&emsp;&emsp;&ensp;#关于窗口的UI文件 \
+├── appletwidget.cpp&emsp;&emsp;&emsp;#自启动管理窗口的实现文件 \
+├── appletwidget.h&emsp;&emsp;&emsp;&emsp;#自启动管理窗口的头文件 \
+├── images&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;#图片 \
+│   ├── QT_IDE.png \
+│   ├── QT_前端.png \
+│   ├── deepin自启动修改.png \
+│   ├── 类图.jpg \
+│   ├── 右键.png \
+│   ├── 图标.png \
+│   ├── 结果.png \
+│   ├── 中期类图.jpg \
+│   ├── 中期测试.png \
+│   └── 前端界面.png \
+├── install.sh&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;#插件安装脚本 \
+├── main_aboutdialog_test.cpp&emsp;#关于窗口的测试文件 \
+├── main_test.cpp&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;#测试文件 \
+├── mainwidget.cpp&emsp;&emsp;&emsp;&emsp;&emsp;#插件类的实现文件 \
+├── mainwidget.h&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;#插件类的头文件 \
+├── self_startup.json&emsp;&emsp;&emsp;&emsp;&ensp;#插件的元数据文件，指明了当前插件所使用的 dde-dock 的接口版本 \
+├── self_startup.pro&emsp;&emsp;&emsp;&emsp;&emsp;#辅助 cmake 的配置文件 \
+├── self_startup.qrc&emsp;&emsp;&emsp;&emsp;&emsp;#用于展示插件图片 \
+├── selfstartupplugin.cpp&emsp;&emsp;&emsp;#部件类的实现文件 \
+├── selfstartupplugin.h&emsp;&emsp;&emsp;&emsp;#部件类的头文件 \
+├── 初赛报告.md \
+└── 过程文档.md 
 ## 分工
 
 朱元依：插件类框架开发、部件类前端开发
