@@ -157,6 +157,11 @@ void AppletWidget::update_widget()
 
         i++;
     }
+
+    tableModel->setItem(i, 0, new QStandardItem());// to_do
+    tableModel->setItem(i, 1, new QStandardItem());
+    tableModel->setItem(i, 2, new QStandardItem());
+    tableModel->setItem(i, 3, new QStandardItem());
     qDebug()<<"applet6";
 
     //add + button
@@ -205,7 +210,7 @@ void AppletWidget::delButtonClicked(QAbstractButton *button)
     // functions   
     Delete(button->property("APP").toString());      //TODO
     qDebug() << QString("here1");
-    // update_widget();
+    update_widget();
     qDebug() << QString("here2");
 }
 
