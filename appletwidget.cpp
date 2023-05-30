@@ -102,8 +102,8 @@ void AppletWidget::update_widget()
         {
             Btngroups.push_back(m_pButtonGroup);
         }else{
-            // if(Btngroups[i] != NULL)
-            //     delete(Btngroups[i]);
+            if(Btngroups[i] != NULL)
+                delete(Btngroups[i]);
             Btngroups[i] = m_pButtonGroup;
         }
 
@@ -111,8 +111,8 @@ void AppletWidget::update_widget()
         {
             Btns.push_back(m_btns);
         }else{
-            // if(Btns[i] != NULL)
-            //     delete(Btns[i]);
+            if(Btns[i] != NULL)
+                delete(Btns[i]);
             Btns[i] = m_btns;
         }
         //set table content
