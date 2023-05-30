@@ -146,7 +146,7 @@ void AppletWidget::update_widget()
     btn_del->move(30,0);
 
     connect(btn_add, SIGNAL(clicked()), this, SLOT(addButtonClicked()));
-    connect(btn_del, SIGNAL(clicked()), this, SLOT(delButtonClicked(QAbstractButton*)));
+    connect(btn_del, SIGNAL(clicked()), this, SLOT(delButtonClicked()));
 
 }
 
@@ -154,6 +154,7 @@ void AppletWidget::onButtonClicked(QAbstractButton *button)
 {
     // now button
     qDebug() << button->property("index").toInt() << Qt::endl;
+    choosen_name = button->property("APP").toString();
 
     // functions         to_do
      if(button->property("index").toInt() % 2 == 0)
@@ -181,13 +182,13 @@ void AppletWidget::addButtonClicked()
     update_widget();
 }
 
-void AppletWidget::delButtonClicked(QAbstractButton *button)
+void AppletWidget::delButtonClicked()
 {
     // now button
-    qDebug() << button->property("index").toInt() << Qt::endl;
+    qDebug() << choosen_name << Qt::endl;
 
     // functions   
-    Delete(button->property("APP").toString());      //TODO
+    Delete(choosen_name);      //TODO
     update_widget();
     
 }
