@@ -10,7 +10,7 @@
 #include <sys/stat.h>
 #include <fstream>
 #include <qfiledialog.h>
-#include<QPushButton>
+
 
 QString getName(){
 
@@ -41,6 +41,8 @@ AppletWidget::AppletWidget(QWidget *parent) :
     qDebug()<<"enter applet init"<<Qt::endl;
     setFixedSize(500,700);
     QString uname = getName();
+    tableView = NULL;
+    tableModel = NULL;
 
     username = uname;
     // add tableview
@@ -52,17 +54,20 @@ void AppletWidget::update_widget()
     qDebug()<<"enter applet init"<<Qt::endl;
     if(tableView == NULL)
     {
+        // delete(tableView);
         tableView = new QTableView(this);
     }
     if(tableModel == NULL)
     {
+        // delete(tableModel);
         tableModel = new QStandardItemModel(this);
     }
-    
+
+    // tableView = new QTableView(this);
     tableView->setMinimumSize(550,700);
     tableView->verticalHeader()->hide(); // hide row number
 
-    
+    // tableModel = new QStandardItemModel(this);
     tableView->setModel(tableModel);// recommend to set model before detail settings
 
     //set columns
@@ -90,15 +95,15 @@ void AppletWidget::update_widget()
     for(auto it = selfSetUp.begin();it != selfSetUp.end(); it++) //to_do
     {
         // add button group
-        QButtonGroup * m_pButtonGroup = new QButtonGroup(this);
-        QButtonGroup * m_btns = new QButtonGroup(this);
+        QButtonGroup * m_pButtonGroup = new QButtonGroup();
+        QButtonGroup * m_btns = new QButtonGroup();
 
         if(i >= Btngroups.size())
         {
             Btngroups.push_back(m_pButtonGroup);
         }else{
-            if(Btngroups[i] != NULL)
-                delete(Btngroups[i]);
+            // if(Btngroups[i] != NULL)
+            //     delete(Btngroups[i]);
             Btngroups[i] = m_pButtonGroup;
         }
 
@@ -106,8 +111,8 @@ void AppletWidget::update_widget()
         {
             Btns.push_back(m_btns);
         }else{
-            if(Btns[i] != NULL)
-                delete(Btns[i]);
+            // if(Btns[i] != NULL)
+            //     delete(Btns[i]);
             Btns[i] = m_btns;
         }
         //set table content
@@ -199,8 +204,9 @@ void AppletWidget::delButtonClicked(QAbstractButton *button)
 
     // functions   
     Delete(button->property("APP").toString());      //TODO
+    qDebug() << QString("here1");
     // update_widget();
-    
+    qDebug() << QString("here2");
 }
 
 AppletWidget::~AppletWidget()
@@ -498,10 +504,10 @@ QString AppletWidget::Add(){
     }
 }
 
-QString AppletWidget::Delete(QString name){
+void AppletWidget::Delete(QString name){
     if(!name_path.contains(name)){
         qDebug() << QString("Invalid app name");
-        return QString("Invalid app name");
+        return ;
     }
 
     QString path = name_path[name];
