@@ -32,6 +32,11 @@ DDE 自启动管理插件可用于集中管理`Deepin`系统中软件开机自�
 
 ## 成果展示
 
+功能展示视频链接：
+
+链接：https://pan.baidu.com/s/1-9B3n-61Sh7Jaq4SKp4WSw?pwd=hoo8 
+提取码：hoo8 
+
 插件图标：
 
 ![图标](./images/图标.png)
